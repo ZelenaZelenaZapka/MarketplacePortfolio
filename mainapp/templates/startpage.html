@@ -1,38 +1,356 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marketplace</title>
-    <link rel="stylesheet" href="static/css/style_startpage.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MarketHub — Marketplace</title>
+  <link rel="stylesheet" href="static/css/style_startpage.css" />
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="logo">MarketPlace</div>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a href="#" class="brand">
+        <div class="brand-logo">M</div>
+        <div>
+          MarketHub
+          <small>Сучасний marketplace для покупців і продавців</small>
         </div>
-    </nav>
+      </a>
 
-    <!-- Hero Section -->
+      <div class="nav-actions">
+        <button class="btn btn-secondary">Каталог</button>
+        <button class="btn btn-secondary">Увійти</button>
+        <button class="btn btn-primary">Стати продавцем</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
     <section class="hero">
-        <div class="hero-content">
-            <h1>Welcome to Your Marketplace</h1>
-            <p>Start your journey with us today</p>
-            <button class="btn">Get Started</button>
+      <div class="container hero-grid">
+        <div class="hero-main">
+            <span class="pill">● Новий формат маркетплейсу</span>
+            <h1>Один каталог. Багато продавців. Зручний досвід для покупця.</h1>
+            <p>
+            Швидкий, темний та сучасний агрегатор товарів, де покупець легко знаходить потрібне,
+            а продавець керує лише своїм магазином без зайвої складності.
+            </p>
+
+            <div class="hero-actions">
+            <button class="btn btn-primary">Переглянути товари</button>
+            <button class="btn btn-secondary">Як це працює</button>
+            </div>
+
+            <div class="hero-stats">
+            <div class="stat">
+                <strong>12K+</strong>
+                <span>товарів у каталозі</span>
+            </div>
+            <div class="stat">
+                <strong>240+</strong>
+                <span>активних продавців</span>
+            </div>
+            <div class="stat">
+                <strong>24/7</strong>
+                <span>оформлення замовлень</span>
+            </div>
+            </div>
+        </div>
+
+        <aside class="hero-history panel">
+            <div class="history-block">
+            <div class="history-head">
+                <h3>Останні переглянуті</h3>
+                <a href="#">Дивитись все</a>
+            </div>
+
+            <div class="history-list">
+                <article class="history-item">
+                <div class="history-thumb">🎧</div>
+                <div class="history-info">
+                    <strong>AirSound Pro</strong>
+                    <span>AudioSpace • 2 899 ₴</span>
+                </div>
+                </article>
+
+                <article class="history-item">
+                <div class="history-thumb">⌚</div>
+                <div class="history-info">
+                    <strong>Nova Watch X</strong>
+                    <span>TimeLab • 4 250 ₴</span>
+                </div>
+                </article>
+
+                <article class="history-item">
+                <div class="history-thumb">💡</div>
+                <div class="history-info">
+                    <strong>Glow Mini</strong>
+                    <span>BrightHome • 799 ₴</span>
+                </div>
+                </article>
+            </div>
+            </div>
+
+            <div class="history-block">
+            <div class="history-head">
+                <h3>Останні покупки</h3>
+                <a href="#">Мої замовлення</a>
+            </div>
+
+            <div class="history-list">
+                <article class="history-item">
+                <div class="history-thumb">👟</div>
+                <div class="history-info">
+                    <strong>Motion Runner</strong>
+                    <span>StreetOne • 3 450 ₴</span>
+                </div>
+                </article>
+
+                <article class="history-item">
+                <div class="history-thumb">🪑</div>
+                <div class="history-info">
+                    <strong>Nordic Soft</strong>
+                    <span>LoftZone • 6 999 ₴</span>
+                </div>
+                </article>
+            </div>
+            </div>
+        </aside>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2026 MarketPlace. All rights reserved.</p>
+    <section class="container layout">
+      <aside class="panel filters">
+        <h3 class="panel-title">Фільтри</h3>
+
+        <div class="filter-group">
+          <label>Пошук по назві</label>
+          <input type="text" placeholder="Наприклад, навушники..." />
         </div>
-    </footer>
+
+        <div class="filter-group">
+          <label>Категорія</label>
+          <select>
+            <option>Всі категорії</option>
+            <option>Електроніка</option>
+            <option>Одяг</option>
+            <option>Дім та побут</option>
+            <option>Аксесуари</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Ціна</label>
+          <input type="text" placeholder="Наприклад, 500 - 3000 грн" />
+        </div>
+
+        <div class="filter-group">
+          <label>Популярні теги</label>
+          <div class="chips">
+            <button class="chip active" type="button">Новинки</button>
+            <button class="chip" type="button">Зі знижкою</button>
+            <button class="chip" type="button">Топ</button>
+            <button class="chip" type="button">Швидка доставка</button>
+            <button class="chip" type="button">Преміум</button>
+          </div>
+        </div>
+
+        <button class="btn btn-primary full-width">Застосувати</button>
+      </aside>
+
+      <section class="catalog">
+        <div class="panel toolbar">
+          <div class="searchbar">
+            <span>⌕</span>
+            <input type="text" placeholder="Шукати товари, бренди, категорії..." />
+          </div>
+
+          <div class="toolbar-right">
+            <select>
+              <option>Спочатку популярні</option>
+              <option>Від дешевих</option>
+              <option>Від дорогих</option>
+              <option>Нові надходження</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="results-head">
+          <div>
+            <h2>Каталог товарів</h2>
+            <p>Знайдено 128 товарів у різних магазинах</p>
+          </div>
+          <span class="pill">Оновлено щойно</span>
+        </div>
+
+        <div class="product-grid">
+          <article class="product-card">
+            <div class="product-image">🎧</div>
+            <div class="product-body">
+              <div class="product-meta">
+                <span>AudioSpace</span>
+                <span>4.9 ★</span>
+              </div>
+              <h3 class="product-title">Бездротові навушники AirSound Pro</h3>
+              <p class="product-desc">
+                Якісний звук, активне шумозаглушення та сучасний дизайн для щоденного використання.
+              </p>
+              <div class="product-bottom">
+                <div class="price">
+                  <strong>2 899 ₴</strong>
+                  <span>в наявності</span>
+                </div>
+                <button class="btn btn-primary add-to-cart" type="button">В кошик</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card">
+            <div class="product-image">⌚</div>
+            <div class="product-body">
+              <div class="product-meta">
+                <span>TimeLab</span>
+                <span>4.7 ★</span>
+              </div>
+              <h3 class="product-title">Смарт-годинник Nova Watch X</h3>
+              <p class="product-desc">
+                Лаконічний вигляд, моніторинг активності та автономність на кілька днів.
+              </p>
+              <div class="product-bottom">
+                <div class="price">
+                  <strong>4 250 ₴</strong>
+                  <span>доставка сьогодні</span>
+                </div>
+                <button class="btn btn-primary add-to-cart" type="button">В кошик</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card">
+            <div class="product-image">💡</div>
+            <div class="product-body">
+              <div class="product-meta">
+                <span>BrightHome</span>
+                <span>4.8 ★</span>
+              </div>
+              <h3 class="product-title">Розумна лампа Glow Mini</h3>
+              <p class="product-desc">
+                Керування зі смартфона, тепле і холодне світло, підходить для сучасного інтер’єру.
+              </p>
+              <div class="product-bottom">
+                <div class="price">
+                  <strong>799 ₴</strong>
+                  <span>є декілька кольорів</span>
+                </div>
+                <button class="btn btn-primary add-to-cart" type="button">В кошик</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card">
+            <div class="product-image">🪑</div>
+            <div class="product-body">
+              <div class="product-meta">
+                <span>LoftZone</span>
+                <span>4.6 ★</span>
+              </div>
+              <h3 class="product-title">Крісло Nordic Soft</h3>
+              <p class="product-desc">
+                Мінімалістична форма, м’яка посадка та стиль для сучасного домашнього простору.
+              </p>
+              <div class="product-bottom">
+                <div class="price">
+                  <strong>6 999 ₴</strong>
+                  <span>безкоштовна доставка</span>
+                </div>
+                <button class="btn btn-primary add-to-cart" type="button">В кошик</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card">
+            <div class="product-image">👟</div>
+            <div class="product-body">
+              <div class="product-meta">
+                <span>StreetOne</span>
+                <span>4.9 ★</span>
+              </div>
+              <h3 class="product-title">Кросівки Motion Runner</h3>
+              <p class="product-desc">
+                Повсякденний комфорт, сучасний силует і легка підошва для активного ритму.
+              </p>
+              <div class="product-bottom">
+                <div class="price">
+                  <strong>3 450 ₴</strong>
+                  <span>топ продажів</span>
+                </div>
+                <button class="btn btn-primary add-to-cart" type="button">В кошик</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card">
+            <div class="product-image">💻</div>
+            <div class="product-body">
+              <div class="product-meta">
+                <span>TechBridge</span>
+                <span>4.8 ★</span>
+              </div>
+              <h3 class="product-title">Ноутбук UltraBook Air 14</h3>
+              <p class="product-desc">
+                Тонкий корпус, яскравий дисплей і продуктивність для роботи, навчання та подорожей.
+              </p>
+              <div class="product-bottom">
+                <div class="price">
+                  <strong>28 900 ₴</strong>
+                  <span>залишилось 5 шт</span>
+                </div>
+                <button class="btn btn-primary add-to-cart" type="button">В кошик</button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <aside class="panel cart">
+        <h3 class="panel-title">Ваш кошик</h3>
+        <p class="muted">
+          Швидкий перегляд вибраних товарів без переходу на окрему сторінку.
+        </p>
+
+        <div class="cart-list">
+          <div class="cart-item">
+            <div class="cart-thumb">🎧</div>
+            <div>
+              <h4>AirSound Pro</h4>
+              <p>1 × 2 899 ₴</p>
+            </div>
+            <strong>2 899 ₴</strong>
+          </div>
+
+          <div class="cart-item">
+            <div class="cart-thumb">💡</div>
+            <div>
+              <h4>Glow Mini</h4>
+              <p>1 × 799 ₴</p>
+            </div>
+            <strong>799 ₴</strong>
+          </div>
+        </div>
+
+        <div class="cart-total">
+          <span>Разом</span>
+          <strong>3 698 ₴</strong>
+        </div>
+
+        <div class="cart-actions">
+          <button class="btn btn-primary" type="button">Оформити замовлення</button>
+          <button class="btn btn-secondary" type="button">Переглянути кошик</button>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <script src="static/js/script_for_startpage.js"></script>
 </body>
 </html>
