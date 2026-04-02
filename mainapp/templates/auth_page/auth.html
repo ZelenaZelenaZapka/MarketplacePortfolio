@@ -1,0 +1,144 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MarketHub — Вхід / Реєстрація</title>
+  <link rel="stylesheet" href="{% static 'css/auth.css' %}" />  
+</head>
+<body>
+  <main class="auth-page">
+    <div class="auth-shell">
+      <section class="auth-hero">
+        <a href="#" class="brand">
+          <div class="brand-logo">M</div>
+          <div>
+            MarketHub
+            <small>Темний сучасний marketplace</small>
+          </div>
+        </a>
+
+        <div class="hero-content">
+          <span class="pill">● Buyer & Seller access</span>
+          <h1>Увійди або створи акаунт у сучасному marketplace.</h1>
+          <p>
+            Мінімалістичний, швидкий та зручний простір для покупців і продавців.
+            Без зайвого шуму — тільки зрозумілий доступ до каталогу, замовлень і магазину.
+          </p>
+
+          <div class="hero-points">
+            <div class="hero-point">
+              <strong>Покупець</strong>
+              <span>Перегляд товарів, кошик, оформлення замовлень</span>
+            </div>
+            <div class="hero-point">
+              <strong>Продавець</strong>
+              <span>Керування товарами, магазином і замовленнями</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="auth-panel">
+        <div class="auth-card">
+          <div class="auth-card-top">
+            <div class="auth-switch">
+              <button class="switch-btn active" id="show-login" type="button">Вхід</button>
+              <button class="switch-btn" id="show-register" type="button">Реєстрація</button>
+              <div class="switch-indicator" id="switch-indicator"></div>
+            </div>
+          </div>
+
+          <div class="forms-wrap">
+            <form class="auth-form active" id="login-form">
+              <div class="form-head">
+                <h2>З поверненням</h2>
+                <p>Увійди в акаунт, щоб продовжити покупки або керування магазином.</p>
+              </div>
+
+              <div class="form-group">
+                <label for="login-email">Email</label>
+                <input id="login-email" type="email" placeholder="you@example.com" />
+              </div>
+
+              <div class="form-group">
+                <label for="login-password">Пароль</label>
+                <input id="login-password" type="password" placeholder="••••••••" />
+              </div>
+
+              <div class="form-row">
+                <label class="checkbox">
+                  <input type="checkbox" />
+                  <span>Запам’ятати мене</span>
+                </label>
+                <a href="#" class="text-link">Забули пароль?</a>
+              </div>
+
+              <button class="btn btn-primary full-width" type="submit">Увійти</button>
+
+              <div class="form-footer">
+                <span>Ще немає акаунта?</span>
+                <button class="inline-action" id="go-register" type="button">Створити</button>
+              </div>
+            </form>
+
+            <form class="auth-form" id="register-form">
+              <div class="form-head">
+                <h2>Створення акаунта</h2>
+                <p>Обери роль і створи простий доступ до платформи за кілька кроків.</p>
+              </div>
+
+              <div class="role-select">
+                <button class="role-card active" type="button" data-role="buyer">
+                  <span class="role-icon">🛒</span>
+                  <span class="role-title">Покупець</span>
+                  <span class="role-text">Перегляд товарів, кошик, замовлення</span>
+                </button>
+
+                <button class="role-card" type="button" data-role="seller">
+                  <span class="role-icon">🏪</span>
+                  <span class="role-title">Продавець</span>
+                  <span class="role-text">Керування товарами, магазином і продажами</span>
+                </button>
+              </div>
+
+              <input type="hidden" id="selected-role" value="buyer" />
+
+              <div class="form-group">
+                <label for="register-name">Ім’я</label>
+                <input id="register-name" type="text" placeholder="Ваше ім’я" />
+              </div>
+
+              <div class="form-group">
+                <label for="register-email">Email</label>
+                <input id="register-email" type="email" placeholder="you@example.com" />
+              </div>
+
+              <div class="form-group">
+                <label for="register-password">Пароль</label>
+                <input id="register-password" type="password" placeholder="Створіть пароль" />
+              </div>
+
+              <div class="form-group">
+                <label for="register-password-repeat">Підтвердження пароля</label>
+                <input id="register-password-repeat" type="password" placeholder="Повторіть пароль" />
+              </div>
+
+              <button class="btn btn-primary full-width" type="submit">Створити акаунт</button>
+
+              <div class="form-footer">
+                <span>Вже є акаунт?</span>
+                <button class="inline-action" id="go-login" type="button">Увійти</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="{% static 'js/auth.js' %}"></script>
+</body>
+</html>
