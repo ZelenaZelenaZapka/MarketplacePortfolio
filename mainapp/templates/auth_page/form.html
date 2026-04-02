@@ -1,0 +1,102 @@
+<section class="auth-panel">
+    <div class="auth-card">
+        <div class="auth-card-top">
+        <div class="auth-switch">
+            <button class="switch-btn active" id="show-login" type="button">Вхід</button>
+            <button class="switch-btn" id="show-register" type="button">Реєстрація</button>
+            <div class="switch-indicator" id="switch-indicator"></div>
+        </div>
+        </div>
+
+        <div class="forms-wrap">
+        <form class="auth-form active" id="login-form" method="post">
+            {% csrf_token %}
+
+            <div class="form-head">
+            <h2>З поверненням</h2>
+            <p>Увійди в акаунт, щоб продовжити покупки або керування магазином.</p>
+            </div>
+
+            <div class="form-group">
+            <label for="login-email">Email</label>
+            <input id="login-email" name="email" type="email" placeholder="you@example.com" />
+            </div>
+
+            <div class="form-group">
+            <label for="login-password">Пароль</label>
+            <input id="login-password" name="password" type="password" placeholder="••••••••" />
+            </div>
+
+            <div class="form-row">
+            <label class="checkbox">
+                <input type="checkbox" />
+                <span>Запам’ятати мене</span>
+            </label>
+            <a href="#" class="text-link">Забули пароль?</a>
+            </div>
+
+            <button class="btn btn-primary full-width" type="submit">Увійти</button>
+
+            <div class="form-footer">
+            <span>Ще немає акаунта?</span>
+            <button class="inline-action" id="go-register" type="button">Створити</button>
+            </div>
+        </form>
+
+        <form class="auth-form" id="register-form">
+            <div class="form-head">
+            <h2>Створення акаунта</h2>
+            <p>Обери роль і створи простий доступ до платформи за кілька кроків.</p>
+            </div>
+
+            <div class="role-select">
+            <button class="role-card active" type="button" data-role="buyer">
+                <span class="role-icon">🛒</span>
+                <span class="role-title">Покупець</span>
+                <span class="role-text">Перегляд товарів, кошик, замовлення</span>
+            </button>
+
+            <button class="role-card" type="button" data-role="seller">
+                <span class="role-icon">🏪</span>
+                <span class="role-title">Продавець</span>
+                <span class="role-text">Керування товарами, магазином і продажами</span>
+            </button>
+            </div>
+
+            <input type="hidden" name="role" id="selected-role" value="buyer" />
+
+            <div class="form-group">
+            <label for="register-name">Ім’я</label>
+            <input id="register-name" name="name" type="text" placeholder="Ваше ім’я" />
+            </div>
+
+            <div class="form-group">
+            <label for="register-email">Email</label>
+            <input id="register-email" name="email" type="email" placeholder="you@example.com" />
+            </div>
+
+            <div class="form-group">
+            <label for="register-phone">Номер</label>
+            <input id="register-phone" name="phone" type="tel" placeholder="+380123456789" />
+            </div>
+
+            <div class="form-group">
+            <label for="register-password">Пароль</label>
+            <input id="register-password" name="password" type="password" placeholder="Створіть пароль" />
+            </div>
+
+            <div class="form-group">
+            <label for="register-password-repeat">Підтвердження пароля</label>
+            <input id="register-password-repeat" name="confirm_password" type="password" placeholder="Повторіть пароль" />
+            </div>
+
+            <button class="btn btn-primary full-width" type="submit">Створити акаунт</button>
+
+            <div class="form-footer">
+            <span>Вже є акаунт?</span>
+            <button class="inline-action" id="go-login" type="button">Увійти</button>
+            </div>
+        </form>
+        </div>
+    </div>
+</section>

@@ -8,6 +8,7 @@ class Customer(models.Model):
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    password = models.CharField(max_length=255)
 
 class Seller(models.Model):
     name = models.CharField(max_length=255)
@@ -18,6 +19,7 @@ class Seller(models.Model):
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    password = models.CharField(max_length=255)
 
 class Category(models.Model):
     name = models.CharField(max_length=150, unique=True)
