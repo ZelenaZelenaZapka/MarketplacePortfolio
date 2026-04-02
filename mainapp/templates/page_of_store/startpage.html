@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="{% static 'css/style_startpage.css' %}" />
+  <title>
+    {% block title %}MarketHub{% endblock %}
+  </title>
+
+  {% block extra_css %}
+  
+  {% endblock %}
+</head>
+<body>
+  {% include 'page_of_store/nav_bar.html' %}
+
+  {% include 'page_of_store/hero.html' %}
+
+  <main>
+    {% block content %}
+
+     {% include 'page_of_store/itemcard.html' %}
+
+    {% endblock %}
+  </main>
+
+  {% block extra_js %}{% endblock %}
+</body>
+<link rel="script" href="{% static 'js/script_for_startpage.js' %}" />
+</html>
+
