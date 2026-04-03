@@ -9,123 +9,132 @@
         </div>
 
         <div class="forms-wrap">
-        <form class="auth-form {% if not form.errors %}active{% endif %}" id="login-form" method="post">
-            {% csrf_token %}
+            <form class="auth-form {% if not form.errors %}active{% endif %}" id="login-form" method="post" novalidate>
 
-            <div class="form-head">
-            <h2>З поверненням</h2>
-            <p>Увійди в акаунт, щоб продовжити покупки або керування магазином.</p>
-            </div>
+                {% csrf_token %}
 
-            <div class="form-group">
-            <label for="login-email">Email</label>
-            <input id="login-email" name="email" type="email" placeholder="you@example.com" />
-            </div>
+                <input type="hidden" name="form_type" value="login">
+        
+                {% if login_error %}
+                    <div class="error-text">{{ login_error }}</div>
+                {% endif %}
 
-            <div class="form-group">
-            <label for="login-password">Пароль</label>
-            <input id="login-password" name="password" type="password" placeholder="••••••••" />
-            </div>
-
-            <div class="form-row">
-            <label class="checkbox">
-                <input type="checkbox" />
-                <span>Запам’ятати мене</span>
-            </label>
-            <a href="#" class="text-link">Забули пароль?</a>
-            </div>
-
-            <button class="btn btn-primary full-width" type="submit">Увійти</button>
-
-            <div class="form-footer">
-            <span>Ще немає акаунта?</span>
-            <button class="inline-action" id="go-register" type="button">Створити</button>
-            </div>
-        </form>
-
-        <form class="auth-form {% if form.errors %}active{% endif %}" id="register-form" method="POST" novalidate>
-            {% csrf_token %}
-
-            {% if form.non_field_errors %}
-                <div class="error-text">
-                    {{ form.non_field_errors }}
+                <div class="form-head">
+                    <h2>З поверненням</h2>
+                    <p>Увійди в акаунт, щоб продовжити покупки або керування магазином.</p>
                 </div>
-            {% endif %}
 
-            <div class="form-head">
-                <h2>Створення акаунта</h2>
-                <p>Обери роль і створи простий доступ до платформи за кілька кроків.</p>
-            </div>
-
-            <div class="role-select">
-                <button class="role-card active" type="button" data-role="buyer">
-                    <span class="role-icon">🛒</span>
-                    <span class="role-title">Покупець</span>
-                    <span class="role-text">Перегляд товарів, кошик, замовлення</span>
-                </button>
-
-                <button class="role-card" type="button" data-role="seller">
-                    <span class="role-icon">🏪</span>
-                    <span class="role-title">Продавець</span>
-                    <span class="role-text">Керування товарами, магазином і продажами</span>
-                </button>
-            </div>
-
-            <input type="hidden" name="role" id="selected-role" value="buyer">
-
-            {% if form.role.errors %}
-                <div class="error-text">
-                    {{ form.role.errors }}
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input id="login-email" name="email" type="email" placeholder="you@example.com" />
                 </div>
-            {% endif %}
 
-            <div class="form-group">
-                {% if form.name.errors %}
-                    <div class="error-text">{{ form.name.errors }}</div>
+                <div class="form-group">
+                    <label for="login-password">Пароль</label>
+                    <input id="login-password" name="password" type="password" placeholder="••••••••" />
+                </div>
+
+                <div class="form-row">
+                    <label class="checkbox">
+                        <input type="checkbox" />
+                        <span>Запам’ятати мене</span>
+                    </label>
+                    <a href="#" class="text-link">Забули пароль?</a>
+                </div>
+
+                <button class="btn btn-primary full-width" type="submit">Увійти</button>
+
+                <div class="form-footer">
+                    <span>Ще немає акаунта?</span>
+                    <button class="inline-action" id="go-register" type="button">Створити</button>
+                </div>
+            </form>
+
+            <form class="auth-form {% if form.errors %}active{% endif %}" id="register-form" method="POST" novalidate>
+                {% csrf_token %}
+
+                <input type="hidden" name="form_type" value="register">
+
+                {% if form.non_field_errors %}
+                    <div class="error-text">
+                        {{ form.non_field_errors }}
+                    </div>
                 {% endif %}
-                <label for="register-name">Ім’я</label>
-                {{ form.name }}
-            </div>
 
-            <div class="form-group">
-                {% if form.email.errors %}
-                    <div class="error-text">{{ form.email.errors }}</div>
+                <div class="form-head">
+                    <h2>Створення акаунта</h2>
+                    <p>Обери роль і створи простий доступ до платформи за кілька кроків.</p>
+                </div>
+
+                <div class="role-select">
+                    <button class="role-card active" type="button" data-role="buyer">
+                        <span class="role-icon">🛒</span>
+                        <span class="role-title">Покупець</span>
+                        <span class="role-text">Перегляд товарів, кошик, замовлення</span>
+                    </button>
+
+                    <button class="role-card" type="button" data-role="seller">
+                        <span class="role-icon">🏪</span>
+                        <span class="role-title">Продавець</span>
+                        <span class="role-text">Керування товарами, магазином і продажами</span>
+                    </button>
+                </div>
+
+                <input type="hidden" name="role" id="selected-role" value="buyer">
+
+                {% if form.role.errors %}
+                    <div class="error-text">
+                        {{ form.role.errors }}
+                    </div>
                 {% endif %}
-                <label for="register-email">Email</label>
-                {{ form.email }}
-            </div>
 
-            <div class="form-group">
-                {% if form.phone.errors %}
-                    <div class="error-text">{{ form.phone.errors }}</div>
-                {% endif %}
-                <label for="register-phone">Номер</label>
-                {{ form.phone }}
-            </div>
+                <div class="form-group">
+                    {% if form.name.errors %}
+                        <div class="error-text">{{ form.name.errors }}</div>
+                    {% endif %}
+                    <label for="register-name">Ім’я</label>
+                    {{ form.name }}
+                </div>
 
-            <div class="form-group">
-                {% if form.password.errors %}
-                    <div class="error-text">{{ form.password.errors }}</div>
-                {% endif %}
-                <label for="register-password">Пароль</label>
-                {{ form.password }}
-            </div>
+                <div class="form-group">
+                    {% if form.email.errors %}
+                        <div class="error-text">{{ form.email.errors }}</div>
+                    {% endif %}
+                    <label for="register-email">Email</label>
+                    {{ form.email }}
+                </div>
 
-            <div class="form-group">
-                {% if form.confirm_password.errors %}
-                    <div class="error-text">{{ form.confirm_password.errors }}</div>
-                {% endif %}
-                <label for="register-password-repeat">Підтвердження пароля</label>
-                {{ form.confirm_password }}
-            </div>
+                <div class="form-group">
+                    {% if form.phone.errors %}
+                        <div class="error-text">{{ form.phone.errors }}</div>
+                    {% endif %}
+                    <label for="register-phone">Номер</label>
+                    {{ form.phone }}
+                </div>
 
-            <button class="btn btn-primary full-width" type="submit">Створити акаунт</button>
+                <div class="form-group">
+                    {% if form.password.errors %}
+                        <div class="error-text">{{ form.password.errors }}</div>
+                    {% endif %}
+                    <label for="register-password">Пароль</label>
+                    {{ form.password }}
+                </div>
 
-            <div class="form-footer">
-                <span>Вже є акаунт?</span>
-                <button class="inline-action" id="go-login" type="button">Увійти</button>
-            </div>
-        </form>
+                <div class="form-group">
+                    {% if form.confirm_password.errors %}
+                        <div class="error-text">{{ form.confirm_password.errors }}</div>
+                    {% endif %}
+                    <label for="register-password-repeat">Підтвердження пароля</label>
+                    {{ form.confirm_password }}
+                </div>
+
+                <button class="btn btn-primary full-width" type="submit">Створити акаунт</button>
+
+                <div class="form-footer">
+                    <span>Вже є акаунт?</span>
+                    <button class="inline-action" id="go-login" type="button">Увійти</button>
+                </div>
+            </form>
         </div>
     </div>
 </section>

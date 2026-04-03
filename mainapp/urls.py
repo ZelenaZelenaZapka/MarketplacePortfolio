@@ -1,9 +1,10 @@
 from django.urls import path
 
-from . import views
+from .views import auth, store
 
 urlpatterns = [
-    path("store", views.store_page, name="store"),
-    path("", views.register_view, name="reg"),
+    path("/", auth.logout_view, name="logut"),
+    path("store", store.store_page, name="store"),
+    path("", auth.register_view, name="reg"),
 ]
-
+    

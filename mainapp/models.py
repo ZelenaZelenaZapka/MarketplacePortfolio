@@ -8,12 +8,18 @@ class Customer(models.Model):
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f"Customer: {self.user.email}"
+
 class Seller(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     slug = models.SlugField(unique=True)
     phone = models.CharField(max_length=30, blank=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Customer: {self.user.email}"
 
 
 class Category(models.Model):
