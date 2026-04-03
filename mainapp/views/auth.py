@@ -9,6 +9,7 @@ from ..models import Customer, Seller
 def register_view(request):
     form = RegisterUserForm()
     login_error = None
+    tab = request.GET.get("tab", "login")
 
     if request.method == "POST":
         form_type = request.POST.get("form_type")
@@ -63,6 +64,7 @@ def register_view(request):
         {
             "form": form,
             "login_error": login_error,
+            "tab": tab,
         },
     )
 

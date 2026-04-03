@@ -1,15 +1,22 @@
 <div class="container topbar-inner">
-      <a href="#" class="brand">
-        <div class="brand-logo">M</div>
-        <div>
-          MarketHub
-          <small>Сучасний marketplace для покупців і продавців</small>
-        </div>
-      </a>
-
-      <div class="nav-actions">
-        <button class="btn btn-secondary">Каталог</button>
-        <button class="btn btn-secondary">Увійти</button>
-        <button class="btn btn-primary">Стати продавцем</button>
-      </div>
+  <a href="#" class="brand">
+    <div class="brand-logo">M</div>
+    <div>
+      MarketHub
+      <small>Сучасний marketplace для покупців і продавців</small>
     </div>
+  </a>
+
+  <div class="nav-actions">
+    <button class="btn btn-secondary">Каталог</button>
+
+    {% if user.is_authenticated %}
+      <div class="user-box">
+        {{ user.first_name|default:user.username }}
+      </div>
+    {% else %}
+      <a href="{% url 'reg' %}?tab=login" class="btn btn-secondary">Увійти</a>
+      <a href="{% url 'reg' %}?tab=register" class="btn btn-primary">Зареєструватися</a>
+    {% endif %}
+  </div>
+</div>

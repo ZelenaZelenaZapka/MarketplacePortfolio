@@ -9,7 +9,7 @@
         </div>
 
         <div class="forms-wrap">
-            <form class="auth-form {% if not form.errors %}active{% endif %}" id="login-form" method="post" novalidate>
+            <form class="auth-form {% if tab == 'login' and not form.errors %}active{% endif %}" id="login-form" method="post" novalidate>
 
                 {% csrf_token %}
 
@@ -50,7 +50,7 @@
                 </div>
             </form>
 
-            <form class="auth-form {% if form.errors %}active{% endif %}" id="register-form" method="POST" novalidate>
+            <form class="auth-form {% if tab == 'register' or form.errors %}active{% endif %}" id="register-form" method="POST" novalidate>
                 {% csrf_token %}
 
                 <input type="hidden" name="form_type" value="register">
