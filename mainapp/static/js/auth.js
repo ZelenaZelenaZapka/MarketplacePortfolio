@@ -12,6 +12,9 @@ const switchIndicator = document.getElementById("switch-indicator");
 const roleCards = document.querySelectorAll(".role-card");
 const selectedRoleInput = document.getElementById("selected-role");
 
+const heroLogin = document.getElementById("hero-login");
+const heroRegister = document.getElementById("hero-register");
+
 function showLogin() {
   loginForm.classList.add("active");
   registerForm.classList.remove("active");
@@ -20,6 +23,9 @@ function showLogin() {
   showRegisterBtn.classList.remove("active");
 
   switchIndicator.classList.remove("to-register");
+
+  heroLogin.classList.add("active");
+  heroRegister.classList.remove("active");
 }
 
 function showRegister() {
@@ -30,6 +36,9 @@ function showRegister() {
   showLoginBtn.classList.remove("active");
 
   switchIndicator.classList.add("to-register");
+
+  heroRegister.classList.add("active");
+  heroLogin.classList.remove("active");
 }
 
 showLoginBtn.addEventListener("click", showLogin);
@@ -44,3 +53,9 @@ roleCards.forEach((card) => {
     selectedRoleInput.value = card.dataset.role;
   });
 });
+
+if (registerForm.classList.contains("active")) {
+  showRegister();
+} else {
+  showLogin();
+}
