@@ -13,310 +13,30 @@
     <!-- {% include 'page_of_store/nav_bar.html' %} -->
   </header>
 
-  <main class="seller-dashboard-page">
-    <div class="container">
-      <section class="dashboard-header panel">
-        <div>
-          <span class="dashboard-badge">Seller dashboard</span>
-          <h1>Кабінет продавця</h1>
-          <p>Керуйте магазинами, товарами та слідкуйте за основними показниками.</p>
-        </div>
-
-        <div class="dashboard-header__actions">
-          <button class="btn btn-primary" type="button">Додати товар</button>
-          <button class="btn btn-secondary" type="button" id="openStoreModal">
-            Додати магазин
-          </button>
-          <a href="{% url 'store' %}" class="btn btn-secondary">Назад</a>
-        </div>
-      </section>
-
-      <section class="dashboard-grid">
-        <div class="dashboard-side-column">
-          <aside class="dashboard-sidebar panel dashboard-sidebar--fit">
-            <h3>Магазини</h3>
-
-            <div class="dashboard-store-list">
-              {% for store in stores %}
-                <button class="dashboard-store-item {% if forloop.first %}active{% endif %}">
-                  {{ store.name }}
-                </button>
-              {% empty %}
-                <p>У вас поки немає магазинів.</p>
-              {% endfor %}
-            </div>
-          </aside>
-
-          <aside class="dashboard-filter panel">
-            <h3>Фільтри товарів</h3>
-
-            <form class="dashboard-filter-form" method="get">
-              <div class="filter-group">
-                <label for="product-name">Назва товару</label>
-                <input
-                  type="text"
-                  id="product-name"
-                  name="product_name"
-                  placeholder="Наприклад: AirSound"
-                >
-              </div>
-
-              <div class="filter-group">
-                <label>Ціна</label>
-                <div class="filter-price-row">
-                  <input type="number" name="price_from" placeholder="Від">
-                  <input type="number" name="price_to" placeholder="До">
-                </div>
-              </div>
-
-              <div class="filter-group">
-                <label for="price_sort">Сортування</label>
-                <select id="price_sort" name="price_sort">
-                  <option value="">Без сортування</option>
-                  <option value="asc">Ціна: від меншої</option>
-                  <option value="desc">Ціна: від більшої</option>
-                </select>
-              </div>
-
-              <div class="filter-check">
-                <label class="filter-check__label">
-                  <input type="checkbox" name="in_stock">
-                  <span>Тільки в наявності</span>
-                </label>
-              </div>
-
-              <div class="filter-actions">
-                <button type="submit" class="btn btn-primary">Застосувати</button>
-                <button type="reset" class="btn btn-secondary">Скинути</button>
-              </div>
-            </form>
-          </aside>
-        </div>
-
-        <div class="dashboard-content">
-          <section class="dashboard-stats">
-            <div class="dashboard-stat panel">
-              <span>Товари</span>
-              <strong>42</strong>
-              <small>активних товарів</small>
-            </div>
-
-            <div class="dashboard-stat panel">
-              <span>Замовлення</span>
-              <strong>13</strong>
-              <small>за тиждень</small>
-            </div>
-
-            <div class="dashboard-stat panel">
-              <span>Прибуток</span>
-              <strong>28 500 ₴</strong>
-              <small>за місяць</small>
-            </div>
-
-            <div class="dashboard-stat panel">
-              <span>Перегляди</span>
-              <strong>1 240</strong>
-              <small>цього тижня</small>
-            </div>
-          </section>
-
-          <section class="dashboard-panels">
-            <div class="dashboard-block panel">
-              <div class="dashboard-block__head">
-                <h3>Популярні товари</h3>
-                <a href="#">Всі товари</a>
-              </div>
-
-              <div class="dashboard-product-list">
-                <div class="dashboard-product-item">
-                  <div>
-                    <strong>AirSound Pro</strong>
-                    <span>24 продажі</span>
-                  </div>
-                  <b>2 899 ₴</b>
-                </div>
-
-                <div class="dashboard-product-item">
-                  <div>
-                    <strong>Nova Watch X</strong>
-                    <span>17 продажів</span>
-                  </div>
-                  <b>4 250 ₴</b>
-                </div>
-
-                <div class="dashboard-product-item">
-                  <div>
-                    <strong>Glow Mini</strong>
-                    <span>12 продажів</span>
-                  </div>
-                  <b>799 ₴</b>
-                </div>
-              </div>
-            </div>
-
-            <div class="dashboard-block panel">
-              <div class="dashboard-block__head">
-                <h3>Останні замовлення</h3>
-                <a href="#">Всі замовлення</a>
-              </div>
-
-              <div class="dashboard-order-list">
-                <div class="dashboard-order-item">
-                  <div>
-                    <strong>#1042</strong>
-                    <span>2 товари • 3 450 ₴</span>
-                  </div>
-                  <mark>new</mark>
-                </div>
-
-                <div class="dashboard-order-item">
-                  <div>
-                    <strong>#1041</strong>
-                    <span>1 товар • 799 ₴</span>
-                  </div>
-                  <mark>paid</mark>
-                </div>
-
-                <div class="dashboard-order-item">
-                  <div>
-                    <strong>#1040</strong>
-                    <span>4 товари • 6 200 ₴</span>
-                  </div>
-                  <mark>sent</mark>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section class="dashboard-products panel">
-            <div class="dashboard-block__head">
-              <h3>Мої товари</h3>
-              <a href="#">Всі товари</a>
-            </div>
-
-            <div class="seller-products-table">
-              <div class="seller-products-table__head">
-                <span>Товар</span>
-                <span>Ціна</span>
-                <span>Статус</span>
-                <span>Дії</span>
-              </div>
-
-              <div class="seller-product-row">
-                <div class="seller-product-main">
-                  <div class="seller-product-image">
-                    <img src="{% static 'img/product-placeholder.png' %}" alt="Product">
-                  </div>
-                  <div class="seller-product-info">
-                    <strong>AirSound Pro</strong>
-                    <small>Бездротові навушники</small>
-                  </div>
-                </div>
-
-                <div class="seller-product-price">2 899 ₴</div>
-
-                <div class="seller-product-status">
-                  <span class="status-badge status-instock">В наявності</span>
-                </div>
-
-                <div class="seller-product-actions">
-                  <button class="btn btn-secondary btn-sm" type="button">Змінити</button>
-                  <button class="btn btn-danger btn-sm" type="button">Видалити</button>
-                </div>
-              </div>
-
-              <div class="seller-product-row">
-                <div class="seller-product-main">
-                  <div class="seller-product-image">
-                    <img src="{% static 'img/product-placeholder.png' %}" alt="Product">
-                  </div>
-                  <div class="seller-product-info">
-                    <strong>Nova Watch X</strong>
-                    <small>Смарт-годинник</small>
-                  </div>
-                </div>
-
-                <div class="seller-product-price">4 250 ₴</div>
-
-                <div class="seller-product-status">
-                  <span class="status-badge status-outstock">Немає в наявності</span>
-                </div>
-
-                <div class="seller-product-actions">
-                  <button class="btn btn-secondary btn-sm" type="button">Змінити</button>
-                  <button class="btn btn-danger btn-sm" type="button">Видалити</button>
-                </div>
-              </div>
-
-              <div class="seller-product-row">
-                <div class="seller-product-main">
-                  <div class="seller-product-image">
-                    <img src="{% static 'img/product-placeholder.png' %}" alt="Product">
-                  </div>
-                  <div class="seller-product-info">
-                    <strong>Glow Mini</strong>
-                    <small>Настільна лампа</small>
-                  </div>
-                </div>
-
-                <div class="seller-product-price">799 ₴</div>
-
-                <div class="seller-product-status">
-                  <span class="status-badge status-instock">В наявності</span>
-                </div>
-
-                <div class="seller-product-actions">
-                  <button class="btn btn-secondary btn-sm" type="button">Змінити</button>
-                  <button class="btn btn-danger btn-sm" type="button">Видалити</button>
-                </div>
-              </div>
-            </div>
-          </section>
-
-        </div>
-      </section>
-    </div>
-  </main>
+  {% include 'page_of_store/dashboard_func/dashboard_main.html' %}
 
   <!-- Modal -->
   <div class="modal-overlay" id="storeModal">
-    <div class="modal-window">
-      <div class="modal-window__head">
-        <h2>Новий магазин</h2>
-        <button type="button" class="modal-close" id="closeStoreModal">&times;</button>
-      </div>
-
-      <form method="post" class="store-form">
-        {% csrf_token %}
-
-        <div class="store-form__group">
-          <label for="store-name">Назва магазину</label>
-          <input
-            id="store-name"
-            type="text"
-            name="name"
-            placeholder="Наприклад: Tech World"
-            required
-          >
-        </div>
-
-        <div class="store-form__group">
-          <label for="store-description">Опис магазину</label>
-          <textarea
-            id="store-description"
-            name="description"
-            rows="4"
-            placeholder="Коротко опишіть ваш магазин"
-          ></textarea>
-        </div>
-
-        <div class="store-form__actions">
-          <button type="button" class="btn btn-light" id="cancelStoreModal">Скасувати</button>
-          <button type="submit" class="btn btn-primary">Створити магазин</button>
-        </div>
-      </form>
+  <div class="modal-window">
+    <div class="modal-window__head">
+      <h2>Новий магазин</h2>
+      <button type="button" class="modal-close" id="closeStoreModal">&times;</button>
     </div>
+
+    {% include 'page_of_store/dashboard_func/form_store.html' %}
   </div>
+</div>
+
+<div class="modal-overlay" id="itemsModal">
+  <div class="modal-window">
+    <div class="modal-window__head">
+      <h2>Новий товар</h2>
+      <button type="button" class="modal-close" id="closeItemsModal">&times;</button>
+    </div>
+
+    {% include 'page_of_store/dashboard_func/form_item.html' %}
+  </div>
+</div>
 
   <script>
     const storeModal = document.getElementById("storeModal");
@@ -339,6 +59,30 @@
     storeModal.addEventListener("click", (event) => {
       if (event.target === storeModal) {
         storeModal.classList.remove("active");
+      }
+    });
+
+
+    const itemsModal = document.getElementById("itemsModal");
+    const openItemsModal = document.getElementById("openItemsModal");
+    const closeItemsModal = document.getElementById("closeItemsModal");
+    const cancelItemsModal = document.getElementById("cancelItemsModal");
+
+    openItemsModal.addEventListener("click", () => {
+      itemsModal.classList.add("active");
+    });
+
+    closeItemsModal.addEventListener("click", () => {
+      itemsModal.classList.remove("active");
+    });
+
+    cancelItemsModal.addEventListener("click", () => {
+      itemsModal.classList.remove("active");
+    });
+
+    itemsModal.addEventListener("click", (event) => {
+      if (event.target === itemsModal) {
+        itemsModal.classList.remove("active");
       }
     });
   </script>

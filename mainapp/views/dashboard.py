@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.text import slugify
 
 from ..models import Seller, Store
+from ..forms import ProductForm
 
 
 
@@ -44,3 +45,26 @@ def dashboard(request):
             "stores": stores,
         },
     )
+
+@login_required
+def item(request):
+    product_form = ProductForm()
+
+    if request.method == 'POST':
+        product_form = ProductForm(request.POST, request.FILES)
+        print("ITEM VIEW WORKS")
+        print(request.POST)
+        print(request.FILES)
+
+        if product_form.is_valid():
+            product = product_form.save(commit=False)
+            product.store = Store.objects.first()   # тимчасово
+            product.save()
+            return redirect('dashboard')
+        else:
+            print(product_form.errors)
+
+    return render(request, 'page_of_store/dashboard.html', {
+        'product_form': product_form,
+    })
+

@@ -1,0 +1,52 @@
+<form method="post" class="store-form" enctype="multipart/form-data" action="{% url 'item_dashboard' %}">
+    {% csrf_token %}
+
+    <div class="store-form__group">
+        <label for="store-name">Назва магазину</label>
+        <input
+        id="store-name"
+        type="text"
+        name="name"
+        placeholder="Наприклад: Tech World"
+        required
+        >
+    </div>
+
+    <div class="store-form__group">
+        <label for="store-description">Опис магазину</label>
+        <textarea
+        id="store-description"
+        name="description"
+        rows="4"
+        placeholder="Коротко опишіть ваш магазин"></textarea>
+    </div>
+
+    <div class="store-form__group">
+        <label for="store-description">Ціна в грн</label>
+        <input 
+        type="number" 
+        name="price" 
+        step="0.01">
+    </div>
+
+    <div class="store-form__group">
+        <input 
+        type="file" 
+        name="image">
+    </div>
+
+    <div class="store-form__group">
+        <label for="product-category">Категорія</label>
+        <select id="product-category" name="category">
+            <option value="">Оберіть категорію</option>
+            {% for category in product_form.fields.category.queryset %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="store-form__actions">
+        <button type="button" class="btn btn-light" id="cancelItemsModal">Скасувати</button>
+        <button type="submit" class="btn btn-primary">Створити магазин</button>
+    </div>
+</form>
