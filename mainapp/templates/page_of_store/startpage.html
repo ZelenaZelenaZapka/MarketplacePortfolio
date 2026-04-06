@@ -16,7 +16,15 @@
 <body>
   {% include 'page_of_store/nav_bar.html' %}
 
-  {% include 'page_of_store/hero.html' %}
+
+  {% if user.is_authenticated %}
+    {% if is_seller %}
+      {% include 'page_of_store/hero_seller.html' %}
+    {% endif %}
+    {% if is_customer %}
+      {% include 'page_of_store/hero_customer.html' %}
+    {% endif %}
+  {% endif %}
 
   <main>
     {% block content %}

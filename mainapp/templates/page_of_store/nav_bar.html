@@ -11,6 +11,10 @@
     <button class="btn btn-secondary">Каталог</button>
 
     {% if user.is_authenticated %}
+      {% if is_seller %}
+        <a href="#" class="btn btn-primary">Панель продавця</a>
+      {% endif %}
+
       <div class="user-box">
         {{ user.first_name|default:user.username }}
       </div>
@@ -19,4 +23,4 @@
       <a href="{% url 'reg' %}?tab=register" class="btn btn-primary">Зареєструватися</a>
     {% endif %}
   </div>
-</div>
+</div>  

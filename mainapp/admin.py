@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import Customer, Product, Seller, CartItem, Category, OrderItem, Store, Order, Payment, Cart
 
+
 admin.site.register(Customer)
 admin.site.register(Seller)
 admin.site.register(Category)

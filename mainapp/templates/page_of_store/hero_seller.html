@@ -1,0 +1,54 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/hero_seller.css' %}" />
+<section class="seller-hero">
+  <div class="container">
+    <div class="seller-dashboard panel">
+      <div class="seller-dashboard__top">
+        <div>
+          <span class="seller-badge">Seller panel</span>
+          <h2>Панель продавця</h2>
+          <p>Коротка статистика по вашому магазину та швидкий доступ до керування товарами.</p>
+        </div>
+
+        <div class="seller-dashboard__actions">
+          <div class="seller-store-switcher">
+            <label for="seller-store">Магазин</label>
+            <select id="seller-store" name="store">
+              <option selected>Основний магазин</option>
+              <option>Tech Store</option>
+              <option>Home Store</option>
+              <option>Outlet Store</option>
+            </select>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="seller-metrics">
+        <div class="seller-card">
+          <span class="seller-card__label">Товари</span>
+          <strong class="seller-card__value">24</strong>
+          <small class="seller-card__hint">активних позицій</small>
+        </div>
+
+        <div class="seller-card">
+          <span class="seller-card__label">Замовлення</span>
+          <strong class="seller-card__value">8</strong>
+          <small class="seller-card__hint">за останні 7 днів</small>
+        </div>
+
+        <div class="seller-card">
+          <span class="seller-card__label">Прибуток</span>
+          <strong class="seller-card__value">12 400 ₴</strong>
+          <small class="seller-card__hint">цього місяця</small>
+        </div>
+
+        <div class="seller-card">
+          <span class="seller-card__label">Топ товар</span>
+          <strong class="seller-card__value">Nike Air</strong>
+          <small class="seller-card__hint">найбільше переглядів</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
