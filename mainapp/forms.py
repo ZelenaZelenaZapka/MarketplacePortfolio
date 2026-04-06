@@ -1,6 +1,7 @@
 import re
 from django import forms
 from django.contrib.auth.models import User
+from django.utils.text import slugify
 
 class RegisterUserForm(forms.Form):
     ROLE_CHOICES = (
@@ -84,4 +85,23 @@ class RegisterUserForm(forms.Form):
         return cleaned_data
     
 
-    
+class StoreForm(forms.Form):
+    name = forms.CharField(
+        max_length=400,
+        error_messages={
+            "required": "Введіть назву магазину",
+        }
+    )
+
+    description = forms.CharField(
+        required=False,
+        widget=forms.Textarea,
+    )
+
+    def clean_name(self):
+        name = self.cleaned_data.get("name", "").strip()
+
+        if not name:
+            raise forms.ValidationError("Введіть назву магазину")
+
+        return name

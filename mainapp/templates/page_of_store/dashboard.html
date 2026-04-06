@@ -10,7 +10,7 @@
 </head>
 <body>
   <header class="topbar">
-    <!-- {% include 'page_of_store/nav_bar.html' %}   -->
+    <!-- {% include 'page_of_store/nav_bar.html' %} -->
   </header>
 
   <main class="seller-dashboard-page">
@@ -23,8 +23,10 @@
         </div>
 
         <div class="dashboard-header__actions">
-          <button class="btn btn-primary">Додати товар</button>
-          <button class="btn btn-secondary">Додати магазин</button>
+          <button class="btn btn-primary" type="button">Додати товар</button>
+          <button class="btn btn-secondary" type="button" id="openStoreModal">
+            Додати магазин
+          </button>
         </div>
       </section>
 
@@ -33,9 +35,13 @@
           <h3>Магазини</h3>
 
           <div class="dashboard-store-list">
-            <button class="dashboard-store-item active">Main Store</button>
-            <button class="dashboard-store-item">Tech Shop</button>
-            <button class="dashboard-store-item">Outlet</button>
+            {% for store in stores %}
+              <button class="dashboard-store-item {% if forloop.first %}active{% endif %}">
+                {{ store.name }}
+              </button>
+            {% empty %}
+              <p>У вас поки немає магазинів.</p>
+            {% endfor %}
           </div>
         </aside>
 
@@ -137,5 +143,70 @@
       </section>
     </div>
   </main>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="storeModal">
+    <div class="modal-window">
+      <div class="modal-window__head">
+        <h2>Новий магазин</h2>
+        <button type="button" class="modal-close" id="closeStoreModal">&times;</button>
+      </div>
+
+      <form method="post" class="store-form">
+        {% csrf_token %}
+
+        <div class="store-form__group">
+          <label for="store-name">Назва магазину</label>
+          <input
+            id="store-name"
+            type="text"
+            name="name"
+            placeholder="Наприклад: Tech World"
+            required
+          >
+        </div>
+
+        <div class="store-form__group">
+          <label for="store-description">Опис магазину</label>
+          <textarea
+            id="store-description"
+            name="description"
+            rows="4"
+            placeholder="Коротко опишіть ваш магазин"
+          ></textarea>
+        </div>
+
+        <div class="store-form__actions">
+          <button type="button" class="btn btn-light" id="cancelStoreModal">Скасувати</button>
+          <button type="submit" class="btn btn-primary">Створити магазин</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const storeModal = document.getElementById("storeModal");
+    const openStoreModal = document.getElementById("openStoreModal");
+    const closeStoreModal = document.getElementById("closeStoreModal");
+    const cancelStoreModal = document.getElementById("cancelStoreModal");
+
+    openStoreModal.addEventListener("click", () => {
+      storeModal.classList.add("active");
+    });
+
+    closeStoreModal.addEventListener("click", () => {
+      storeModal.classList.remove("active");
+    });
+
+    cancelStoreModal.addEventListener("click", () => {
+      storeModal.classList.remove("active");
+    });
+
+    storeModal.addEventListener("click", (event) => {
+      if (event.target === storeModal) {
+        storeModal.classList.remove("active");
+      }
+    });
+  </script>
 </body>
 </html>
