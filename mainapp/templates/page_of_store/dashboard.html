@@ -27,23 +27,71 @@
           <button class="btn btn-secondary" type="button" id="openStoreModal">
             Додати магазин
           </button>
+          <a href="{% url 'store' %}" class="btn btn-secondary">Назад</a>
         </div>
       </section>
 
       <section class="dashboard-grid">
-        <aside class="dashboard-sidebar panel">
-          <h3>Магазини</h3>
+        <div class="dashboard-side-column">
+          <aside class="dashboard-sidebar panel dashboard-sidebar--fit">
+            <h3>Магазини</h3>
 
-          <div class="dashboard-store-list">
-            {% for store in stores %}
-              <button class="dashboard-store-item {% if forloop.first %}active{% endif %}">
-                {{ store.name }}
-              </button>
-            {% empty %}
-              <p>У вас поки немає магазинів.</p>
-            {% endfor %}
-          </div>
-        </aside>
+            <div class="dashboard-store-list">
+              {% for store in stores %}
+                <button class="dashboard-store-item {% if forloop.first %}active{% endif %}">
+                  {{ store.name }}
+                </button>
+              {% empty %}
+                <p>У вас поки немає магазинів.</p>
+              {% endfor %}
+            </div>
+          </aside>
+
+          <aside class="dashboard-filter panel">
+            <h3>Фільтри товарів</h3>
+
+            <form class="dashboard-filter-form" method="get">
+              <div class="filter-group">
+                <label for="product-name">Назва товару</label>
+                <input
+                  type="text"
+                  id="product-name"
+                  name="product_name"
+                  placeholder="Наприклад: AirSound"
+                >
+              </div>
+
+              <div class="filter-group">
+                <label>Ціна</label>
+                <div class="filter-price-row">
+                  <input type="number" name="price_from" placeholder="Від">
+                  <input type="number" name="price_to" placeholder="До">
+                </div>
+              </div>
+
+              <div class="filter-group">
+                <label for="price_sort">Сортування</label>
+                <select id="price_sort" name="price_sort">
+                  <option value="">Без сортування</option>
+                  <option value="asc">Ціна: від меншої</option>
+                  <option value="desc">Ціна: від більшої</option>
+                </select>
+              </div>
+
+              <div class="filter-check">
+                <label class="filter-check__label">
+                  <input type="checkbox" name="in_stock">
+                  <span>Тільки в наявності</span>
+                </label>
+              </div>
+
+              <div class="filter-actions">
+                <button type="submit" class="btn btn-primary">Застосувати</button>
+                <button type="reset" class="btn btn-secondary">Скинути</button>
+              </div>
+            </form>
+          </aside>
+        </div>
 
         <div class="dashboard-content">
           <section class="dashboard-stats">
@@ -139,6 +187,92 @@
               </div>
             </div>
           </section>
+
+          <section class="dashboard-products panel">
+            <div class="dashboard-block__head">
+              <h3>Мої товари</h3>
+              <a href="#">Всі товари</a>
+            </div>
+
+            <div class="seller-products-table">
+              <div class="seller-products-table__head">
+                <span>Товар</span>
+                <span>Ціна</span>
+                <span>Статус</span>
+                <span>Дії</span>
+              </div>
+
+              <div class="seller-product-row">
+                <div class="seller-product-main">
+                  <div class="seller-product-image">
+                    <img src="{% static 'img/product-placeholder.png' %}" alt="Product">
+                  </div>
+                  <div class="seller-product-info">
+                    <strong>AirSound Pro</strong>
+                    <small>Бездротові навушники</small>
+                  </div>
+                </div>
+
+                <div class="seller-product-price">2 899 ₴</div>
+
+                <div class="seller-product-status">
+                  <span class="status-badge status-instock">В наявності</span>
+                </div>
+
+                <div class="seller-product-actions">
+                  <button class="btn btn-secondary btn-sm" type="button">Змінити</button>
+                  <button class="btn btn-danger btn-sm" type="button">Видалити</button>
+                </div>
+              </div>
+
+              <div class="seller-product-row">
+                <div class="seller-product-main">
+                  <div class="seller-product-image">
+                    <img src="{% static 'img/product-placeholder.png' %}" alt="Product">
+                  </div>
+                  <div class="seller-product-info">
+                    <strong>Nova Watch X</strong>
+                    <small>Смарт-годинник</small>
+                  </div>
+                </div>
+
+                <div class="seller-product-price">4 250 ₴</div>
+
+                <div class="seller-product-status">
+                  <span class="status-badge status-outstock">Немає в наявності</span>
+                </div>
+
+                <div class="seller-product-actions">
+                  <button class="btn btn-secondary btn-sm" type="button">Змінити</button>
+                  <button class="btn btn-danger btn-sm" type="button">Видалити</button>
+                </div>
+              </div>
+
+              <div class="seller-product-row">
+                <div class="seller-product-main">
+                  <div class="seller-product-image">
+                    <img src="{% static 'img/product-placeholder.png' %}" alt="Product">
+                  </div>
+                  <div class="seller-product-info">
+                    <strong>Glow Mini</strong>
+                    <small>Настільна лампа</small>
+                  </div>
+                </div>
+
+                <div class="seller-product-price">799 ₴</div>
+
+                <div class="seller-product-status">
+                  <span class="status-badge status-instock">В наявності</span>
+                </div>
+
+                <div class="seller-product-actions">
+                  <button class="btn btn-secondary btn-sm" type="button">Змінити</button>
+                  <button class="btn btn-danger btn-sm" type="button">Видалити</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
         </div>
       </section>
     </div>
