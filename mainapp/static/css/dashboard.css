@@ -1,0 +1,273 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0f1115;
+  color: #f5f7fb;
+}
+
+.container {
+  width: min(1200px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.topbar {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: #11141a;
+}
+
+.panel {
+  background: #151922;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  padding: 0 18px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+.btn-primary {
+  background: #7c5cff;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #6d4df0;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+.seller-dashboard-page {
+  padding: 32px 0 48px;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 24px;
+  margin-bottom: 24px;
+  border-radius: 24px;
+}
+
+.dashboard-header h1 {
+  margin: 10px 0 8px;
+  font-size: 32px;
+  color: #fff;
+}
+
+.dashboard-header p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.dashboard-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(120, 119, 255, 0.14);
+  color: #b8b8ff;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.dashboard-header__actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 20px;
+}
+
+.dashboard-sidebar {
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.dashboard-sidebar h3 {
+  margin: 0 0 16px;
+  color: #fff;
+}
+
+.dashboard-store-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dashboard-store-item {
+  width: 100%;
+  text-align: left;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.dashboard-store-item:hover,
+.dashboard-store-item.active {
+  background: rgba(120, 119, 255, 0.16);
+  border-color: rgba(120, 119, 255, 0.28);
+}
+
+.dashboard-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.dashboard-stat {
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.dashboard-stat span {
+  display: block;
+  margin-bottom: 10px;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 14px;
+}
+
+.dashboard-stat strong {
+  display: block;
+  font-size: 28px;
+  margin-bottom: 6px;
+  color: #fff;
+}
+
+.dashboard-stat small {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.dashboard-panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.dashboard-block {
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.dashboard-block__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.dashboard-block__head h3 {
+  margin: 0;
+  color: #fff;
+}
+
+.dashboard-block__head a {
+  color: #b8b8ff;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.dashboard-product-list,
+.dashboard-order-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dashboard-product-item,
+.dashboard-order-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.dashboard-product-item strong,
+.dashboard-order-item strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #fff;
+}
+
+.dashboard-product-item span,
+.dashboard-order-item span {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+}
+
+.dashboard-product-item b {
+  color: #fff;
+}
+
+.dashboard-order-item mark {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(120, 255, 160, 0.16);
+  color: #9effb8;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+@media (max-width: 1000px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dashboard-panels {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .dashboard-header {
+    flex-direction: column;
+  }
+
+  .dashboard-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-header h1 {
+    font-size: 26px;
+  }
+}

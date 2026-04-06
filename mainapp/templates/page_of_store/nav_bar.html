@@ -12,7 +12,7 @@
 
     {% if user.is_authenticated %}
       {% if is_seller %}
-        <a href="#" class="btn btn-primary">Панель продавця</a>
+        <a href="{% url 'dashboard' %}" class="btn btn-primary">Панель продавця</a>
       {% endif %}
 
       <div class="user-box">

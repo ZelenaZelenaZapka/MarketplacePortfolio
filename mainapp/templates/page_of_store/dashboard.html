@@ -1,0 +1,141 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Кабінет продавця</title>
+  <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+</head>
+<body>
+  <header class="topbar">
+    <!-- {% include 'page_of_store/nav_bar.html' %}   -->
+  </header>
+
+  <main class="seller-dashboard-page">
+    <div class="container">
+      <section class="dashboard-header panel">
+        <div>
+          <span class="dashboard-badge">Seller dashboard</span>
+          <h1>Кабінет продавця</h1>
+          <p>Керуйте магазинами, товарами та слідкуйте за основними показниками.</p>
+        </div>
+
+        <div class="dashboard-header__actions">
+          <button class="btn btn-primary">Додати товар</button>
+          <button class="btn btn-secondary">Додати магазин</button>
+        </div>
+      </section>
+
+      <section class="dashboard-grid">
+        <aside class="dashboard-sidebar panel">
+          <h3>Магазини</h3>
+
+          <div class="dashboard-store-list">
+            <button class="dashboard-store-item active">Main Store</button>
+            <button class="dashboard-store-item">Tech Shop</button>
+            <button class="dashboard-store-item">Outlet</button>
+          </div>
+        </aside>
+
+        <div class="dashboard-content">
+          <section class="dashboard-stats">
+            <div class="dashboard-stat panel">
+              <span>Товари</span>
+              <strong>42</strong>
+              <small>активних товарів</small>
+            </div>
+
+            <div class="dashboard-stat panel">
+              <span>Замовлення</span>
+              <strong>13</strong>
+              <small>за тиждень</small>
+            </div>
+
+            <div class="dashboard-stat panel">
+              <span>Прибуток</span>
+              <strong>28 500 ₴</strong>
+              <small>за місяць</small>
+            </div>
+
+            <div class="dashboard-stat panel">
+              <span>Перегляди</span>
+              <strong>1 240</strong>
+              <small>цього тижня</small>
+            </div>
+          </section>
+
+          <section class="dashboard-panels">
+            <div class="dashboard-block panel">
+              <div class="dashboard-block__head">
+                <h3>Популярні товари</h3>
+                <a href="#">Всі товари</a>
+              </div>
+
+              <div class="dashboard-product-list">
+                <div class="dashboard-product-item">
+                  <div>
+                    <strong>AirSound Pro</strong>
+                    <span>24 продажі</span>
+                  </div>
+                  <b>2 899 ₴</b>
+                </div>
+
+                <div class="dashboard-product-item">
+                  <div>
+                    <strong>Nova Watch X</strong>
+                    <span>17 продажів</span>
+                  </div>
+                  <b>4 250 ₴</b>
+                </div>
+
+                <div class="dashboard-product-item">
+                  <div>
+                    <strong>Glow Mini</strong>
+                    <span>12 продажів</span>
+                  </div>
+                  <b>799 ₴</b>
+                </div>
+              </div>
+            </div>
+
+            <div class="dashboard-block panel">
+              <div class="dashboard-block__head">
+                <h3>Останні замовлення</h3>
+                <a href="#">Всі замовлення</a>
+              </div>
+
+              <div class="dashboard-order-list">
+                <div class="dashboard-order-item">
+                  <div>
+                    <strong>#1042</strong>
+                    <span>2 товари • 3 450 ₴</span>
+                  </div>
+                  <mark>new</mark>
+                </div>
+
+                <div class="dashboard-order-item">
+                  <div>
+                    <strong>#1041</strong>
+                    <span>1 товар • 799 ₴</span>
+                  </div>
+                  <mark>paid</mark>
+                </div>
+
+                <div class="dashboard-order-item">
+                  <div>
+                    <strong>#1040</strong>
+                    <span>4 товари • 6 200 ₴</span>
+                  </div>
+                  <mark>sent</mark>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
