@@ -696,3 +696,10 @@
     width: 100%;
   }
 }
+
+.dashboard-store-item:hover,
+.dashboard-store-item:focus,
+.dashboard-store-item:active {
+    text-decoration: none;
+    color: inherit;
+}

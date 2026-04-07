@@ -20,14 +20,15 @@
 
       <section class="dashboard-grid">
         <div class="dashboard-side-column">
+
           <aside class="dashboard-sidebar panel dashboard-sidebar--fit">
             <h3>Магазини</h3>
-
             <div class="dashboard-store-list">
               {% for store in stores %}
-                <button class="dashboard-store-item {% if forloop.first %}active{% endif %}">
+                <a href="{% url 'dashboard' %}?store={{ store.id }}"
+                  class="dashboard-store-item {% if selected_store and selected_store.id == store.id %}active{% endif %}" style="text-decoration: none;">
                   {{ store.name }}
-                </button>
+                </a>
               {% empty %}
                 <p>У вас поки немає магазинів.</p>
               {% endfor %}

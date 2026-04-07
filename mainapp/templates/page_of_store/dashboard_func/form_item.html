@@ -1,5 +1,6 @@
 <form method="post" class="store-form" enctype="multipart/form-data" action="{% url 'item_dashboard' %}">
     {% csrf_token %}
+    <input type="hidden" name="store_id" value="{{ selected_store.id }}">
 
     <div class="store-form__group">
         <label for="store-name">Назва магазину</label>

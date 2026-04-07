@@ -14,68 +14,37 @@
         <span>Дії</span>
         </div>
 
-        <div class="seller-product-row">
-        <div class="seller-product-main">
-            <div class="seller-product-image">
-            <img src="{% static 'img/product-placeholder.png' %}" alt="Product">
+        {% for product in products %}
+            <div class="seller-product-row">
+                <div class="seller-product-main">
+                    <div class="seller-product-image">
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        {% else %}
+                            <img src="{% static 'img/product-placeholder.png' %}" alt="Product">
+                        {% endif %}
+                    </div>
+
+                    <div class="seller-product-info">
+                        <strong>{{ product.name }}</strong>
+                        <small>{{ product.description }}</small>
+                    </div>
+                </div>
+
+                <div class="seller-product-price">{{ product.price }} ₴</div>
+
+                <div class="seller-product-status">
+                    <span class="status-badge status-instock">В наявності</span>
+                </div>
+
+                <div class="seller-product-actions">
+                    <button class="btn btn-secondary btn-sm" type="button">Змінити</button>
+                    <button class="btn btn-danger btn-sm" type="button">Видалити</button>
+                </div>
             </div>
-            <div class="seller-product-info">
-            <strong>AirSound Pro</strong>
-            <small>Бездротові навушники</small>
-            </div>
-        </div>
-
-        <div class="seller-product-price">2 899 ₴</div>
-
-        <div class="seller-product-status">
-            <span class="status-badge status-instock">В наявності</span>
-        </div>
-
-        <div class="seller-product-actions">
-            <button class="btn btn-secondary btn-sm" type="button">Змінити</button>
-            <button class="btn btn-danger btn-sm" type="button">Видалити</button>
-        </div>
-        </div>
-
-        <div class="seller-product-row">
-        <div class="seller-product-main">
-            <div class="seller-product-image">
-            <img src="{% static 'img/product-placeholder.png' %}" alt="Product">
-            </div>
-            <div class="seller-product-info">
-            <strong>Nova Watch X</strong>
-            <small>Смарт-годинник</small>
-            </div>
-        </div>
-
-        <div class="seller-product-price">4 250 ₴</div>
-
-        <div class="seller-product-status">
-            <span class="status-badge status-outstock">Немає в наявності</span>
-        </div>
-
-        <div class="seller-product-actions">
-            <button class="btn btn-secondary btn-sm" type="button">Змінити</button>
-            <button class="btn btn-danger btn-sm" type="button">Видалити</button>
-        </div>
-        </div>
-
-        <div class="seller-product-row">
-        <div class="seller-product-main">
-            <div class="seller-product-image">
-            <img src="{% static 'img/product-placeholder.png' %}" alt="Product">
-            </div>
-            <div class="seller-product-info">
-            <strong>Glow Mini</strong>
-            <small>Настільна лампа</small>
-            </div>
-        </div>
-
-        <div class="seller-product-price">799 ₴</div>
-
-        <div class="seller-product-status">
-            <span class="status-badge status-instock">В наявності</span>
-        </div>
+            {% empty %}
+                <p>Товарів поки немає.</p>
+            {% endfor %}
 
         <div class="seller-product-actions">
             <button class="btn btn-secondary btn-sm" type="button">Змінити</button>
