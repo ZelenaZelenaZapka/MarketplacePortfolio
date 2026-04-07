@@ -111,4 +111,4 @@ class StoreForm(forms.Form):
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'description', 'image', 'price', 'category']
+        fields = ['name', 'description', 'image', 'price', 'category', 'is_active']

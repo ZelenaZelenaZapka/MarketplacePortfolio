@@ -44,23 +44,31 @@
     const closeStoreModal = document.getElementById("closeStoreModal");
     const cancelStoreModal = document.getElementById("cancelStoreModal");
 
-    openStoreModal.addEventListener("click", () => {
-      storeModal.classList.add("active");
-    });
+    if (openStoreModal && storeModal) {
+      openStoreModal.addEventListener("click", () => {
+        storeModal.classList.add("active");
+      });
+    }
 
-    closeStoreModal.addEventListener("click", () => {
-      storeModal.classList.remove("active");
-    });
-
-    cancelStoreModal.addEventListener("click", () => {
-      storeModal.classList.remove("active");
-    });
-
-    storeModal.addEventListener("click", (event) => {
-      if (event.target === storeModal) {
+    if (closeStoreModal && storeModal) {
+      closeStoreModal.addEventListener("click", () => {
         storeModal.classList.remove("active");
-      }
-    });
+      });
+    }
+
+    if (cancelStoreModal && storeModal) {
+      cancelStoreModal.addEventListener("click", () => {
+        storeModal.classList.remove("active");
+      });
+    }
+
+    if (storeModal) {
+      storeModal.addEventListener("click", (event) => {
+        if (event.target === storeModal) {
+          storeModal.classList.remove("active");
+        }
+      });
+    }
 
 
     const itemsModal = document.getElementById("itemsModal");
@@ -68,23 +76,68 @@
     const closeItemsModal = document.getElementById("closeItemsModal");
     const cancelItemsModal = document.getElementById("cancelItemsModal");
 
-    openItemsModal.addEventListener("click", () => {
-      itemsModal.classList.add("active");
-    });
+    if (openItemsModal && itemsModal) {
+      openItemsModal.addEventListener("click", () => {
+        itemsModal.classList.add("active");
+      });
+    }
 
-    closeItemsModal.addEventListener("click", () => {
-      itemsModal.classList.remove("active");
-    });
-
-    cancelItemsModal.addEventListener("click", () => {
-      itemsModal.classList.remove("active");
-    });
-
-    itemsModal.addEventListener("click", (event) => {
-      if (event.target === itemsModal) {
+    if (closeItemsModal && itemsModal) {
+      closeItemsModal.addEventListener("click", () => {
         itemsModal.classList.remove("active");
+      });
+    }
+
+    if (cancelItemsModal && itemsModal) {
+      cancelItemsModal.addEventListener("click", () => {
+        itemsModal.classList.remove("active");
+      });
+    }
+
+    if (itemsModal) {
+      itemsModal.addEventListener("click", (event) => {
+        if (event.target === itemsModal) {
+          itemsModal.classList.remove("active");
+        }
+      });
+    }
+
+
+    const editOpenButtons = document.querySelectorAll('[id^="openEditItemModal-"]');
+
+    editOpenButtons.forEach((button) => {
+      const productId = button.id.replace("openEditItemModal-", "");
+      const modal = document.getElementById(`editItemModal-${productId}`);
+      const closeButton = document.getElementById(`closeEditItemModal-${productId}`);
+      const cancelButton = document.getElementById(`cancelEditItemModal-${productId}`);
+
+      if (button && modal) {
+        button.addEventListener("click", () => {
+          modal.classList.add("active");
+        });
+      }
+
+      if (closeButton && modal) {
+        closeButton.addEventListener("click", () => {
+          modal.classList.remove("active");
+        });
+      }
+
+      if (cancelButton && modal) {
+        cancelButton.addEventListener("click", () => {
+          modal.classList.remove("active");
+        });
+      }
+
+      if (modal) {
+        modal.addEventListener("click", (event) => {
+          if (event.target === modal) {
+            modal.classList.remove("active");
+          }
+        });
       }
     });
   </script>
 </body>
 </html>
+

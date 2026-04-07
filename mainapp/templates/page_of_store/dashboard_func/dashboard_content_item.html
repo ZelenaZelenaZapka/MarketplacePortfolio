@@ -8,10 +8,10 @@
 
     <div class="seller-products-table">
         <div class="seller-products-table__head">
-        <span>Товар</span>
-        <span>Ціна</span>
-        <span>Статус</span>
-        <span>Дії</span>
+            <span>Товар</span>
+            <span>Ціна</span>
+            <span>Статус</span>
+            <span>Дії</span>
         </div>
 
         {% for product in products %}
@@ -34,22 +34,104 @@
                 <div class="seller-product-price">{{ product.price }} ₴</div>
 
                 <div class="seller-product-status">
-                    <span class="status-badge status-instock">В наявності</span>
+                    <span class="status-badge status-instock">
+                        {% if product.is_active %}В наявності{% else %}Немає в наявності{% endif %}
+                    </span>
                 </div>
 
                 <div class="seller-product-actions">
-                    <button class="btn btn-secondary btn-sm" type="button">Змінити</button>
-                    <button class="btn btn-danger btn-sm" type="button">Видалити</button>
+                    <form method="post" action="{% url 'delete_product' product.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button class="btn btn-danger btn-sm" type="submit">Видалити</button>
+                    </form>
+
+                    <button type="button" class="btn btn-secondary btn-sm" id="openEditItemModal-{{ product.id }}">
+                        Редагувати
+                    </button>
                 </div>
             </div>
-            {% empty %}
-                <p>Товарів поки немає.</p>
-            {% endfor %}
 
-        <div class="seller-product-actions">
-            <button class="btn btn-secondary btn-sm" type="button">Змінити</button>
-            <button class="btn btn-danger btn-sm" type="button">Видалити</button>
-        </div>
-        </div>
+            <div class="modal-overlay" id="editItemModal-{{ product.id }}">
+                <div class="modal-window">
+                    <div class="modal-window__head">
+                        <h2>Змінити т��вар</h2>
+                        <button type="button" class="modal-close" id="closeEditItemModal-{{ product.id }}">&times;</button>
+                    </div>
+
+                    <form method="post" class="store-form" enctype="multipart/form-data" action="{% url 'edit_product' product.id %}">
+                        {% csrf_token %}
+
+                        <div class="store-form__group">
+                            <label for="edit-name-{{ product.id }}">Назва товару</label>
+                            <input
+                                id="edit-name-{{ product.id }}"
+                                type="text"
+                                name="name"
+                                value="{{ product.name }}"
+                                required
+                            >
+                        </div>
+
+                        <div class="store-form__group">
+                            <label for="edit-description-{{ product.id }}">Опис товару</label>
+                            <textarea
+                                id="edit-description-{{ product.id }}"
+                                name="description"
+                                rows="4"
+                            >{{ product.description }}</textarea>
+                        </div>
+
+                        <div class="store-form__group">
+                            <label for="edit-price-{{ product.id }}">Ціна в грн</label>
+                            <input
+                                id="edit-price-{{ product.id }}"
+                                type="number"
+                                name="price"
+                                step="0.01"
+                                value="{{ product.price }}"
+                                required
+                            >
+                        </div>
+
+                        <div class="store-form__group">
+                            <label for="edit-image-{{ product.id }}">Нове зображення</label>
+                            <input
+                                id="edit-image-{{ product.id }}"
+                                type="file"
+                                name="image"
+                            >
+                        </div>
+
+                        <div class="store-form__group">
+                            <label for="edit-category-{{ product.id }}">Категорія</label>
+                            <select id="edit-category-{{ product.id }}" name="category">
+                                <option value="">Оберіть категорію</option>
+                                {% for category in product_form.fields.category.queryset %}
+                                    <option value="{{ category.id }}" {% if product.category and product.category.id == category.id %}selected{% endif %}>
+                                        {{ category.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="store-form__group">
+                            <label for="edit-status-{{ product.id }}">Статус</label>
+                            <select id="edit-status-{{ product.id }}" name="is_active">
+                                <option value="True" {% if product.is_active %}selected{% endif %}>В наявності</option>
+                                <option value="False" {% if not product.is_active %}selected{% endif %}>Немає в наявності</option>
+                            </select>
+                        </div>
+
+                        <div class="store-form__actions">
+                            <button type="button" class="btn btn-light" id="cancelEditItemModal-{{ product.id }}">Скасувати</button>
+                            <button type="submit" class="btn btn-primary">Зберегти</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        {% empty %}
+            <p>Товарів поки немає.</p>
+        {% endfor %}
     </div>
-    </section>
+</section>
