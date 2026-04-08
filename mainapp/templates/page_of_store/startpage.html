@@ -35,6 +35,46 @@
   </main>
 
   {% block extra_js %}{% endblock %}
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const forms = document.querySelectorAll('.add-to-cart-form');
+
+        forms.forEach(form => {
+            const button = form.querySelector('.add-to-cart');
+            const productId = form.dataset.productId;
+            const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            button.addEventListener('click', function () {
+                fetch(`/cart/add/${productId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrfToken,
+                        'X-Requested-With': 'XMLHttpRequest',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log('Товар додано:', data);
+
+                        // приклад: оновити лічильник кошика
+                        const cartCounter = document.querySelector('.cart-count');
+                        if (cartCounter) {
+                            cartCounter.textContent = data.cart_count;
+                        }
+                    } else {
+                        console.error(data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Помилка:', error);
+                });
+            });
+        });
+    });
+    </script>	
+
 </body>
 <link rel="script" href="{% static 'js/script_for_startpage.js' %}" />
 </html>
