@@ -12,5 +12,7 @@ urlpatterns = [
     path("dashboard/item/<int:product_id>/edit_product", dashboard.edit_product, name="edit_product"),
     path("cart/add/<int:product_id>/", store.add_to_cart, name="add_to_cart"),
     path("cart/", store.cart_detail, name="cart_detail"),
+    path("cart/data", store.cart_data, name="cart_data"),
+    path("cart/remove/<int:product_id>/", store.remove_from_cart, name="remove_from_cart"),
 ]
 

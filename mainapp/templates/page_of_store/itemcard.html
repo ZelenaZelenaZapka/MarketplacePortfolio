@@ -107,10 +107,10 @@
                   </span>
                 </div>
 
-								<form class="add-to-cart-form" data-product-id="{{ product.id }}">
+								<form class="add-to-cart-form" action="{% url 'add_to_cart' product.id %}">
 									{% csrf_token %}
 									<button class="btn btn-primary add-to-cart" type="button">
-										В кошик
+											В кошик
 									</button>
 								</form>
 
@@ -126,53 +126,35 @@
 
 			<!-- КОШИК -->
     <aside class="panel cart">
-      <div class="cart-header">
-        <div>
-          <h3 class="panel-title">Кошик</h3>
-          <p class="muted">3 товари додано</p>
-        </div>
-      </div>
+			<div class="cart-header">
+				<div>
+					<h3 class="panel-title">Кошик</h3>
+					<p class="muted"><span class="cart-count-text">0</span> товар(ів) додано</p>
+				</div>
+			</div>
 
-      <div class="cart-list">
-        <div class="cart-item">
-					<!--  -->
-          <div class="cart-thumb">
-            <img src="{% static 'img/product-placeholder.png' %}" alt="Навушники">
-          </div>
+			<div class="cart-list" id="cart-list">
+				<p class="muted">Кошик порожній</p>
+			</div>
 
-          <div class="cart-info">
-            <h4>Бездротові навушники AirSound X</h4>
-            <p>1 × 1 499 ₴</p>
-          </div>
+			<div class="cart-summary">
+				<div class="cart-row">
+					<span>Сума товарів</span>
+					<strong><span id="cart-total-price">0</span> ₴</strong>
+				</div>
+				<div class="cart-row">
+					<span>Доставка</span>
+					<strong>Безкоштовно</strong>
+				</div>
+			</div>
 
-          <div class="cart-side">
-            <strong>1 499 ₴</strong>
-            <button class="remove-btn" type="button">×</button>
-          </div>
-        </div>
+			<div class="cart-actions">
+				<button class="btn btn-primary" type="button">Оформити замовлення</button>
+				<a href="{% url 'cart_detail' %}" class="btn btn-secondary">Переглянути кошик</a>
+			</div>
+		</aside>
 
-        
-
-      <div class="cart-summary">
-        <div class="cart-row">
-          <span>Сума товарів</span>
-          <strong>3 698 ₴</strong>
-        </div>
-        <div class="cart-row">
-          <span>Доставка</span>
-          <strong>Безкоштовно</strong>
-        </div>
-      </div>
-
-      <div class="cart-actions">
-        <button class="btn btn-primary" type="button">Оформити замовлення</button>
-        <button class="btn btn-secondary" type="button">Переглянути кошик</button>
-      </div>
-
-      <p class="muted cart-note">
-        Доставка розраховується під час оформлення. Частину товарів можна замовити зі швидкою доставкою.
-      </p>
-    </aside>
   </section>
+
 </main>
 
