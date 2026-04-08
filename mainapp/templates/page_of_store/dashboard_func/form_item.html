@@ -3,23 +3,23 @@
     <input type="hidden" name="store_id" value="{{ selected_store.id }}">
 
     <div class="store-form__group">
-        <label for="store-name">Назва магазину</label>
+        <label for="store-name">Назва </label>
         <input
         id="store-name"
         type="text"
         name="name"
-        placeholder="Наприклад: Tech World"
+        placeholder="Наприклад: Гумова Качечка"
         required
         >
     </div>
 
     <div class="store-form__group">
-        <label for="store-description">Опис магазину</label>
+        <label for="store-description">Опис товару</label>
         <textarea
         id="store-description"
         name="description"
         rows="4"
-        placeholder="Коротко опишіть ваш магазин"></textarea>
+        placeholder="Коротко опишіть ваш товар"></textarea>
     </div>
 
     <div class="store-form__group">
@@ -48,6 +48,6 @@
 
     <div class="store-form__actions">
         <button type="button" class="btn btn-light" id="cancelItemsModal">Скасувати</button>
-        <button type="submit" class="btn btn-primary">Створити магазин</button>
+        <button type="submit" class="btn btn-primary">Створити товар</button>
     </div>
 </form>

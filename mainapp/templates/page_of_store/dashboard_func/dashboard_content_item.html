@@ -54,7 +54,7 @@
             <div class="modal-overlay" id="editItemModal-{{ product.id }}">
                 <div class="modal-window">
                     <div class="modal-window__head">
-                        <h2>Змінити т��вар</h2>
+                        <h2>Змінити товар</h2>
                         <button type="button" class="modal-close" id="closeEditItemModal-{{ product.id }}">&times;</button>
                     </div>
 
@@ -68,8 +68,7 @@
                                 type="text"
                                 name="name"
                                 value="{{ product.name }}"
-                                required
-                            >
+                                required>
                         </div>
 
                         <div class="store-form__group">
@@ -130,8 +129,8 @@
                 </div>
             </div>
 
-        {% empty %}
-            <p>Товарів поки немає.</p>
+            {% empty %}
+                <p>Товарів поки немає.</p>
         {% endfor %}
     </div>
 </section>
