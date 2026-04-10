@@ -1,0 +1,276 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Оплата — Marketplace</title>
+
+  <!-- Підключи свій існуючий global/main css якщо є -->
+  <!-- <link rel="stylesheet" href="styles/main.css"> -->
+
+  <link rel="stylesheet" href="{% static 'css/pay.css' %}" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <a class="brand" href="#">
+        <span class="brand__mark">MP</span>
+        <span class="brand__text">Marketplace</span>
+      </a>
+
+      <nav class="nav">
+        <a class="nav__link" href="{% url 'store' %}">Каталог</a>
+        <a class="nav__link" href="account.html">Акаунт</a>
+        <a class="nav__link" href="orders.html">Попередні замовлення</a>
+      </nav>
+
+      <div class="topbar__secure">
+        <span class="pill pill--ok">Захищена оплата</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container page">
+    <!-- ЛІВА ЧАСТИНА: кошик -->
+    <aside class="panel cart">
+      <div class="panel__head">
+        <h1 class="panel__title">Ваше замовлення</h1>
+        <div class="panel__subtitle">Перевірте товари та кількість</div>
+      </div>
+
+
+      {% if user.is_authenticated %}
+        <div class="cart__list" aria-label="Список товарів">
+          {% for ci in cart_items %}
+            <article class="item">
+              <div class="product-image-frame">
+                {% if item.image_url %}
+                  <img src="{{ ci.image_url }}" alt="{{ ci.name }}">
+                {% else %}
+                  <img src="{% static 'img/product-placeholder.png' %}" alt="Product">
+                {% endif %}
+              </div>
+
+              <div class="item__info">
+                <div class="item__name">{{ ci.name }}</div>
+
+                <div class="item__controls">
+                  <div class="qty" role="group" aria-label="Кількість">
+                    <input class="qty__input" type="number" min="1" value="{{ item.quantity }}" />
+                  </div>
+
+                  <button class="link link--danger" type="button"
+                          data-product-id="{{ item.id }}">Видалити</button>
+                </div>
+              </div>
+
+              <div class="item__price">
+                <div class="money">₴ {{ ci.item_total }}</div>
+                <div class="muted">₴ {{ ci.price }} за 1 шт.</div>
+              </div>
+            </article>
+          {% empty %}
+            <p>Кошик порожній</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+        <article class="item">
+          <img class="item__img" src="https://picsum.photos/seed/item2/120/120" alt="Товар 2">
+          <div class="item__info">
+            <div class="item__name">Назва товару 2</div>
+            <div class="item__meta">
+              <span class="tag">Гарантія 12 міс.</span>
+              <span class="tag">Новий</span>
+            </div>
+
+            <div class="item__controls">
+              <div class="qty" role="group" aria-label="Кількість">
+                <button class="qty__btn" type="button">−</button>
+                <input class="qty__input" type="number" min="1" value="2" />
+                <button class="qty__btn" type="button">+</button>
+              </div>
+
+              <button class="link link--danger" type="button">Видалити</button>
+            </div>
+          </div>
+
+          <div class="item__price">
+            <div class="money">₴ 599</div>
+            <div class="muted">за 1 шт.</div>
+          </div>
+        </article>
+      </div>
+
+      <div class="cart__summary">
+        <div class="row">
+          <span class="muted">Промокод</span>
+          <div class="promo">
+            <input class="input promo__input" type="text" placeholder="Напр. SAVE10" />
+            <button class="btn btn--ghost" type="button">Застосувати</button>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="totals">
+          <div class="totals__row">
+            <span class="muted">Товари</span>
+            <span>₴ 2 497</span>
+          </div>
+          <div class="totals__row">
+            <span class="muted">Доставка</span>
+            <span>₴ 99</span>
+          </div>
+          <div class="totals__row totals__row--bold">
+            <span>Разом</span>
+            <span class="money money--big">₴ 2 596</span>
+          </div>
+        </div>
+
+        <div class="hint">
+          Підказка: доставка безкоштовна від <b>₴ 3 000</b>.
+        </div>
+      </div>
+    </aside>
+
+    <!-- ПРАВА ЧАСТИНА: форма -->
+    <section class="panel checkout">
+      <div class="panel__head">
+        <h2 class="panel__title">Дані для доставки</h2>
+        <div class="panel__subtitle">Заповніть форму — це займе менше хвилини</div>
+      </div>
+
+      <form class="form" action="#" method="post">
+        <div class="grid">
+          <label class="field">
+            <span class="field__label">Прізвище</span>
+            <input class="input" name="lastName" type="text" placeholder="Напр. Шевченко" required />
+          </label>
+
+          <label class="field">
+            <span class="field__label">Імʼя</span>
+            <input class="input" name="firstName" type="text" placeholder="Напр. Олена" required />
+          </label>
+
+          <label class="field">
+            <span class="field__label">Номер</span>
+            <input class="input" name="phone" type="tel" placeholder="+380 XX XXX XX XX" required />
+          </label>
+
+          <label class="field">
+            <span class="field__label">Пошта</span>
+            <input class="input" name="email" type="email" placeholder="name@email.com" required />
+          </label>
+
+          <label class="field field--full">
+            <span class="field__label">Адрес</span>
+            <input class="input" name="address" type="text" placeholder="Місто, вулиця, будинок, квартира" required />
+          </label>
+
+          <label class="field field--full">
+            <span class="field__label">Коментар</span>
+            <textarea class="input textarea" name="comment" rows="4" placeholder="Напр. Домофон не працює, зателефонуйте перед доставкою"></textarea>
+          </label>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="block">
+          <h3 class="block__title">Спосіб доставки</h3>
+          <div class="choices">
+            <label class="choice">
+              <input type="radio" name="delivery" value="courier" checked />
+              <span class="choice__box">
+                <span class="choice__title">Курʼєр</span>
+                <span class="choice__desc">Доставка до дверей (1–2 дні)</span>
+              </span>
+              <span class="choice__price">₴ 99</span>
+            </label>
+
+            <label class="choice">
+              <input type="radio" name="delivery" value="pickup" />
+              <span class="choice__box">
+                <span class="choice__title">Самовивіз</span>
+                <span class="choice__desc">З найближчого пункту (сьогодні/завтра)</span>
+              </span>
+              <span class="choice__price">₴ 0</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="block">
+          <h3 class="block__title">Оплата</h3>
+          <div class="choices">
+            <label class="choice">
+              <input type="radio" name="payment" value="card" checked />
+              <span class="choice__box">
+                <span class="choice__title">Карткою онлайн</span>
+                <span class="choice__desc">Visa / MasterCard</span>
+              </span>
+              <span class="choice__badge">Рекомендовано</span>
+            </label>
+
+            <label class="choice">
+              <input type="radio" name="payment" value="cash" />
+              <span class="choice__box">
+                <span class="choice__title">При отриманні</span>
+                <span class="choice__desc">Готівка або картка</span>
+              </span>
+              <span class="choice__badge">Без передплати</span>
+            </label>
+          </div>
+
+          <div class="cardbox">
+            <div class="cardbox__row">
+              <label class="field field--full">
+                <span class="field__label">Номер картки</span>
+                <input class="input" inputmode="numeric" placeholder="0000 0000 0000 0000" />
+              </label>
+            </div>
+            <div class="cardbox__row cardbox__row--2">
+              <label class="field">
+                <span class="field__label">Термін</span>
+                <input class="input" inputmode="numeric" placeholder="MM/YY" />
+              </label>
+              <label class="field">
+                <span class="field__label">CVV</span>
+                <input class="input" inputmode="numeric" placeholder="***" />
+              </label>
+            </div>
+            <div class="muted small">
+              Ваші платіжні дані не зберігаються (демо-форма для портфоліо).
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <label class="agree">
+            <input type="checkbox" required />
+            <span>Погоджуюсь з умовами та політикою конфіденційності</span>
+          </label>
+
+          <button class="btn btn--primary" type="submit">
+            Підтвердити та оплатити
+            <span class="btn__sub">Разом: ₴ 2 596</span>
+          </button>
+
+          <a class="btn btn--ghost" href="catalog.html">Повернутися в каталог</a>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="muted">© Marketplace • 2026</div>
+      <div class="footer__right">
+        <span class="pill">Підтримка: support@marketplace.local</span>
+        <span class="pill">Повернення 14 днів</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -149,8 +149,8 @@ def add_to_cart(request, product_id):
         "success": True,
         "product_id": product.id,
         "product_name": product.name,
-        "quantity": cart[guest_cart],
-        "cart_count": sum(cart.values()),
+        "quantity": guest_cart[product_id],
+        "cart_count": sum(guest_cart.values()),
     })
 
 
@@ -162,11 +162,18 @@ def cart_data(request):
 
 
 def cart_detail(request):
-    data = get_cart_data(request)
     customer = _get_customer(request)
 
+    items_qs = []
+    if request.user.is_authenticated and customer:
+        cart = Cart.objects.filter(customer=customer).first()
+        if cart:
+            items_qs = cart.items.select_related("product")
+
+    data = get_cart_data(request)
     context = {
         **data,
+        "items_qs": items_qs,  # <-- queryset з CartItem
         "customer": customer,
         "is_guest": not request.user.is_authenticated,
     }
