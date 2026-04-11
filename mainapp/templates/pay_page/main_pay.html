@@ -1,5 +1,8 @@
 {% load static %}
 
+AUTH={{ user.is_authenticated }}
+CART_ITEMS={{ cart_items|length }}
+
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -34,107 +37,8 @@
 
   <main class="container page">
     <!-- ЛІВА ЧАСТИНА: кошик -->
-    <aside class="panel cart">
-      <div class="panel__head">
-        <h1 class="panel__title">Ваше замовлення</h1>
-        <div class="panel__subtitle">Перевірте товари та кількість</div>
-      </div>
-
-
-      {% if user.is_authenticated %}
-        <div class="cart__list" aria-label="Список товарів">
-          {% for ci in cart_items %}
-            <article class="item">
-              <div class="product-image-frame">
-                {% if item.image_url %}
-                  <img src="{{ ci.image_url }}" alt="{{ ci.name }}">
-                {% else %}
-                  <img src="{% static 'img/product-placeholder.png' %}" alt="Product">
-                {% endif %}
-              </div>
-
-              <div class="item__info">
-                <div class="item__name">{{ ci.name }}</div>
-
-                <div class="item__controls">
-                  <div class="qty" role="group" aria-label="Кількість">
-                    <input class="qty__input" type="number" min="1" value="{{ item.quantity }}" />
-                  </div>
-
-                  <button class="link link--danger" type="button"
-                          data-product-id="{{ item.id }}">Видалити</button>
-                </div>
-              </div>
-
-              <div class="item__price">
-                <div class="money">₴ {{ ci.item_total }}</div>
-                <div class="muted">₴ {{ ci.price }} за 1 шт.</div>
-              </div>
-            </article>
-          {% empty %}
-            <p>Кошик порожній</p>
-          {% endfor %}
-        </div>
-      {% endif %}
-
-        <article class="item">
-          <img class="item__img" src="https://picsum.photos/seed/item2/120/120" alt="Товар 2">
-          <div class="item__info">
-            <div class="item__name">Назва товару 2</div>
-            <div class="item__meta">
-              <span class="tag">Гарантія 12 міс.</span>
-              <span class="tag">Новий</span>
-            </div>
-
-            <div class="item__controls">
-              <div class="qty" role="group" aria-label="Кількість">
-                <button class="qty__btn" type="button">−</button>
-                <input class="qty__input" type="number" min="1" value="2" />
-                <button class="qty__btn" type="button">+</button>
-              </div>
-
-              <button class="link link--danger" type="button">Видалити</button>
-            </div>
-          </div>
-
-          <div class="item__price">
-            <div class="money">₴ 599</div>
-            <div class="muted">за 1 шт.</div>
-          </div>
-        </article>
-      </div>
-
-      <div class="cart__summary">
-        <div class="row">
-          <span class="muted">Промокод</span>
-          <div class="promo">
-            <input class="input promo__input" type="text" placeholder="Напр. SAVE10" />
-            <button class="btn btn--ghost" type="button">Застосувати</button>
-          </div>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="totals">
-          <div class="totals__row">
-            <span class="muted">Товари</span>
-            <span>₴ 2 497</span>
-          </div>
-          <div class="totals__row">
-            <span class="muted">Доставка</span>
-            <span>₴ 99</span>
-          </div>
-          <div class="totals__row totals__row--bold">
-            <span>Разом</span>
-            <span class="money money--big">₴ 2 596</span>
-          </div>
-        </div>
-
-        <div class="hint">
-          Підказка: доставка безкоштовна від <b>₴ 3 000</b>.
-        </div>
-      </div>
-    </aside>
+    
+    {% include 'pay_page/carts_item.html' %}
 
     <!-- ПРАВА ЧАСТИНА: форма -->
     <section class="panel checkout">
@@ -254,7 +158,7 @@
 
           <button class="btn btn--primary" type="submit">
             Підтвердити та оплатити
-            <span class="btn__sub">Разом: ₴ 2 596</span>
+            <strong>₴ {{ total_price }}</strong>
           </button>
 
           <a class="btn btn--ghost" href="catalog.html">Повернутися в каталог</a>
@@ -273,4 +177,83 @@
     </div>
   </footer>
 </body>
+
+  <script>
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+    document.addEventListener('click', async (e) => {
+      const btn = e.target.closest('.js-remove');
+      if (!btn) return;
+
+      const url = btn.dataset.url;
+      const csrfToken = getCookie('csrftoken');
+
+      try {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': csrfToken,
+            'X-Requested-With': 'XMLHttpRequest',
+          }
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          location.reload();
+        } else {
+          alert(data.error || 'Не вдалося видалити товар');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Помилка мережі при видаленні');
+      }
+    });
+
+      function getCookie(name) {
+      const v = `; ${document.cookie}`;
+      const parts = v.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+    document.addEventListener('click', async (e) => {
+      const btn = e.target.closest('.js-qty');
+      if (!btn) return;
+
+      const productId = btn.dataset.productId;
+      const action = btn.dataset.action;
+
+      const res = await fetch(`/cart/qty/${productId}/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({ action })
+      });
+
+      const data = await res.json();
+
+      if (data.quantity === 0) {
+        const item = document.querySelector(`[data-product-id="${productId}"]`);
+        if (item) item.remove();
+      } else {
+        document.querySelector(`[data-qty-for="${productId}"]`).value = data.quantity;
+
+        document.querySelector(`[data-item-total-for="${productId}"]`).textContent = data.item_total;
+      }
+
+      document.getElementById('cart-goods-total').textContent = data.total_price;
+      document.getElementById('cart-grand-total').textContent = data.total_price;
+    });
+
+  </script>
+
 </html>
+
+
+
+

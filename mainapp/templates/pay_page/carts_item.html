@@ -1,0 +1,71 @@
+{% load static %}
+
+<aside class="panel cart">
+    <div class="panel__head">
+        <h1 class="panel__title">Ваше замовлення</h1>
+        <div class="panel__subtitle">Перевірте товари та кількість</div>
+    </div>
+
+    {% if user.is_authenticated %}
+    <div class="cart__list" aria-label="Список товарів">
+        {% for ci in cart_items %}
+        <article class="item" data-product-id="{{ ci.id }}">
+            <div class="product-image-frame">
+                {% if ci.image_url %}
+                    <img class="item__img" src="{{ ci.image_url }}" alt="{{ ci.name }}">
+                {% else %}
+                    <img src="{% static 'img/product-placeholder.png' %}" alt="Product">
+                {% endif %}
+            </div>
+            <div class="item__info">
+                <div class="item__name">{{ ci.name }}</div>
+                <div class="item__controls">
+                    <div class="qty">
+                        <button class="qty__btn js-qty" type="button" data-action="dec" data-product-id="{{ ci.id }}">−</button>
+                        <input class="qty__input" type="number" min="1" value="{{ ci.quantity }}" data-qty-for="{{ ci.id }}" />
+                        <button class="qty__btn js-qty" type="button" data-action="inc" data-product-id="{{ ci.id }}">+</button>
+                    </div>
+                    <button class="link link--danger js-remove" type="button" data-url="{% url 'remove_from_cart' ci.id %}">
+                        Видалити
+                    </button>
+                </div>
+            </div>
+            <div class="item__price">
+                <div class="money">₴ <span data-item-total-for="{{ ci.id }}">{{ ci.item_total }}</span></div>
+                <div class="muted">₴ {{ ci.price }} за 1 шт.</div>
+            </div>
+        </article>
+        {% empty %}
+            <p>Кошик порожній</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="cart__summary">
+        <div class="row">
+            <span class="muted">Промокод</span>
+            <div class="promo">
+                <input class="input promo__input" type="text" placeholder="Напр. SAVE10" />
+                <button class="btn btn--ghost" type="button">Застосувати</button>
+            </div>
+        </div>
+        <div class="divider"></div>
+        <div class="totals">
+            <div class="totals__row">
+                <span class="muted">Товари</span>
+                <strong>₴ <span id="cart-goods-total">{{ total_price }}</span></strong>
+            </div>
+            <div class="totals__row">
+                <span class="muted">Доставка</span>
+                <span>₴ 99</span>
+            </div>
+            <div class="totals__row totals__row--bold">
+                <span>Разом</span>
+                <strong>₴ <span id="cart-grand-total">{{ total_price }}</span></strong>
+            </div>
+        </div>
+        <div class="hint">
+            Підказка: доставка безкоштовна від <b>₴ 3 000</b>.
+        </div>
+    </div>
+</aside>

@@ -203,3 +203,96 @@ def remove_from_cart(request, product_id):
         request.session.modified = True
 
     return JsonResponse({"success": True})
+
+
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+import json
+
+from ..models import Product, Customer, Cart, CartItem
+from .order import _get_customer, _get_or_create_cart, get_cart_data  # або просто напряму якщо в тому ж файлі
+
+@require_POST
+def change_quantity(request, product_id):
+    payload = json.loads(request.body)
+    action = payload.get("action")  # "inc" або "dec"
+
+    # 1) AUTH -> DB
+    if request.user.is_authenticated:
+        customer = _get_customer(request)
+        if not customer:
+            return JsonResponse({"success": False, "error": "Customer not found"}, status=400)
+
+        cart = Cart.objects.filter(customer=customer).first()
+        if not cart:
+            return JsonResponse({"success": False, "error": "Cart not found"}, status=400)
+
+        item = CartItem.objects.filter(cart=cart, product_id=product_id).select_related("product").first()
+        if not item:
+            return JsonResponse({"success": False, "error": "Item not found"}, status=404)
+
+        if action == "inc":
+            item.quantity += 1
+            item.save(update_fields=["quantity"])
+        elif action == "dec":
+            if item.quantity <= 1:
+                item.delete()
+                # тоді quantity=0, item_total=0
+                qty = 0
+                item_total = 0.0
+                data = get_cart_data(request)
+                return JsonResponse({"success": True, "quantity": qty, "item_total": item_total, "total_price": data["total_price"]})
+            else:
+                item.quantity -= 1
+                item.save(update_fields=["quantity"])
+        else:
+            return JsonResponse({"success": False, "error": "Invalid action"}, status=400)
+
+        item_total = float(item.product.price * item.quantity)
+        data = get_cart_data(request)
+
+        return JsonResponse({
+            "success": True,
+            "quantity": item.quantity,
+            "item_total": item_total,
+            "total_price": data["total_price"],
+        })
+
+    # 2) GUEST -> SESSION
+    cart = request.session.get("cart", {})
+    pid = str(product_id)
+    if pid not in cart:
+        return JsonResponse({"success": False, "error": "Item not in session cart"}, status=404)
+
+    if action == "inc":
+        cart[pid] += 1
+    elif action == "dec":
+        if cart[pid] <= 1:
+            del cart[pid]
+        else:
+            cart[pid] -= 1
+    else:
+        return JsonResponse({"success": False, "error": "Invalid action"}, status=400)
+
+    # Save session
+    request.session["cart"] = cart
+    request.session.modified = True
+
+    data = get_cart_data(request)
+
+    # ----- CALCULATE item_total & qty -----
+    try:
+        qty = cart[pid]
+        product = Product.objects.get(id=product_id)
+        item_total = float(product.price * qty)
+    except KeyError:
+        # Видалили товар, тому його немає.
+        qty = 0
+        item_total = 0.0
+
+    return JsonResponse({
+        "success": True,
+        "quantity": qty,
+        "item_total": item_total,
+        "total_price": data["total_price"],
+    })
