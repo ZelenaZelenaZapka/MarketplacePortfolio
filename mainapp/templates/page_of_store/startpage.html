@@ -36,7 +36,7 @@
 
   {% block extra_js %}{% endblock %}
 
-  <script>
+<script>
     document.addEventListener('DOMContentLoaded', function () {
         const forms = document.querySelectorAll('.add-to-cart-form');
         const cartDataUrl = "{% url 'cart_data' %}";
@@ -46,42 +46,49 @@
             return csrfInput ? csrfInput.value : '';
         }
 
+        function updateOrderBtnVisibility() {
+            const cartItems = document.querySelectorAll('#cart-list .cart-item');
+            const btn = document.querySelector('.js-order-btn');
+            if (!btn) return;
+            if (cartItems.length > 0) {
+                btn.removeAttribute('hidden');
+                btn.style.display = '';
+            } else {
+                btn.setAttribute('hidden', 'true');
+                btn.style.display = 'none';
+            }
+        }
+
         function renderCart(data) {
             const cartList = document.getElementById('cart-list');
             const cartCountText = document.querySelector('.cart-count-text');
             const cartTotalPrice = document.getElementById('cart-total-price');
-
             if (cartCountText) {
                 cartCountText.textContent = data.cart_count;
             }
-
             if (cartTotalPrice) {
                 cartTotalPrice.textContent = data.total_price;
             }
-
             if (!cartList) return;
 
             if (!data.cart_items.length) {
                 cartList.innerHTML = `<p class="muted">Кошик порожній</p>`;
+                updateOrderBtnVisibility();
                 return;
             }
 
             let itemsHtml = '';
-
             data.cart_items.forEach(item => {
                 const imageUrl = item.image_url ? item.image_url : '/static/img/product-placeholder.png';
-
                 itemsHtml += `
                     <div class="cart-item">
                         <div class="cart-thumb">
                             <img src="${imageUrl}" alt="${item.name}">
                         </div>
-
                         <div class="cart-info">
                             <h4>${item.name}</h4>
                             <p>${item.quantity} × ${item.price} ₴</p>
                         </div>
-
                         <div class="cart-side">
                             <strong>${item.item_total} ₴</strong>
                             <button class="remove-btn" type="button" data-product-id="${item.id}">×</button>
@@ -89,8 +96,8 @@
                     </div>
                 `;
             });
-
             cartList.innerHTML = itemsHtml;
+            updateOrderBtnVisibility();
         }
 
         function loadCartData() {
@@ -142,11 +149,8 @@
 
         document.addEventListener('click', function (event) {
             const removeButton = event.target.closest('.remove-btn');
-
             if (!removeButton) return;
-
             const productId = removeButton.dataset.productId;
-
             fetch(`/cart/remove/${productId}/`, {
                 method: 'POST',
                 headers: {
@@ -167,9 +171,10 @@
             });
         });
 
+        // Перше завантаження
         loadCartData();
     });
-    </script>
+</script>
 
 </body>
 <link rel="script" href="{% static 'js/script_for_startpage.js' %}" />

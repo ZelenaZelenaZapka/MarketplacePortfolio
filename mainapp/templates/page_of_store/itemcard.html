@@ -126,35 +126,38 @@
 
 			<!-- КОШИК -->
     <aside class="panel cart">
-			<div class="cart-header">
-				<div>
-					<h3 class="panel-title">Кошик</h3>
-					<p class="muted"><span class="cart-count-text">0</span> товар(ів) додано</p>
-				</div>
-			</div>
+      <div class="cart-header">
+        <div>
+          <h3 class="panel-title">Кошик</h3>
+          <p class="muted">
+            <span class="cart-count-text">0</span> товар(ів) додано
+          </p>
+        </div>
+      </div>
 
-			<div class="cart-list" id="cart-list">
-				<p class="muted">Кошик порожній</p>
-			</div>
+      <div class="cart-list" id="cart-list">
+        <p class="muted">Кошик порожній</p>
+      </div>
 
-			<div class="cart-summary">
-				<div class="cart-row">
-					<span>Сума товарів</span>
-					<strong>{{ total_price }}</strong>
-				</div>
-				<div class="cart-row">
-					<span>Доставка</span>
-					<strong>Безкоштовно</strong>
-				</div>
-			</div>
+      <div class="cart-summary">
+        <div class="cart-row">
+          <span>Сума товарів</span>
+          <strong id="cart-total-price">0</strong>
+        </div>
+        <div class="cart-row">
+          <span>Доставка</span>
+          <strong>Безкоштовно</strong>
+        </div>
+      </div>
 
-			<div class="cart-actions">
-				<a class="btn btn-primary" href="{% url 'pay_render' %}">Оформити замовлення</a>
-				<!-- <a href="{% url 'cart_detail' %}" class="btn btn-secondary">Переглянути кошик</a> -->
-			</div>
-		</aside>
-
+      <div class="cart-actions">
+        <a class="btn btn-primary js-order-btn" href="{% url 'pay_render' %}" style="display:none;" hidden>
+          Оформити замовлення
+        </a>
+      </div>
+    </aside>
   </section>
 
 </main>
+
 
