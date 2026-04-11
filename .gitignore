@@ -44,6 +44,8 @@ media/
 .env
 .env.*
 
+.secretkey
+
 # Testing / coverage
 htmlcov/
 .tox/
