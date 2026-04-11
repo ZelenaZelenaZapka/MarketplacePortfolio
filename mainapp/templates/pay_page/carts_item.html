@@ -6,40 +6,38 @@
         <div class="panel__subtitle">Перевірте товари та кількість</div>
     </div>
 
-    {% if user.is_authenticated %}
     <div class="cart__list" aria-label="Список товарів">
         {% for ci in cart_items %}
-        <article class="item" data-product-id="{{ ci.id }}">
-            <div class="product-image-frame">
-                {% if ci.image_url %}
-                    <img class="item__img" src="{{ ci.image_url }}" alt="{{ ci.name }}">
-                {% else %}
-                    <img src="{% static 'img/product-placeholder.png' %}" alt="Product">
-                {% endif %}
-            </div>
-            <div class="item__info">
-                <div class="item__name">{{ ci.name }}</div>
-                <div class="item__controls">
-                    <div class="qty">
-                        <button class="qty__btn js-qty" type="button" data-action="dec" data-product-id="{{ ci.id }}">−</button>
-                        <input class="qty__input" type="number" min="1" value="{{ ci.quantity }}" data-qty-for="{{ ci.id }}" />
-                        <button class="qty__btn js-qty" type="button" data-action="inc" data-product-id="{{ ci.id }}">+</button>
-                    </div>
-                    <button class="link link--danger js-remove" type="button" data-url="{% url 'remove_from_cart' ci.id %}">
-                        Видалити
-                    </button>
+            <article class="item" data-product-id="{{ ci.id }}">
+                <div class="product-image-frame">
+                    {% if ci.image_url %}
+                        <img class="item__img" src="{{ ci.image_url }}" alt="{{ ci.name }}">
+                    {% else %}
+                        <img src="{% static 'img/product-placeholder.png' %}" alt="Product">
+                    {% endif %}
                 </div>
-            </div>
-            <div class="item__price">
-                <div class="money">₴ <span data-item-total-for="{{ ci.id }}">{{ ci.item_total }}</span></div>
-                <div class="muted">₴ {{ ci.price }} за 1 шт.</div>
-            </div>
+                <div class="item__info">
+                    <div class="item__name">{{ ci.name }}</div>
+                    <div class="item__controls">
+                        <div class="qty">
+                            <button class="qty__btn js-qty" type="button" data-action="dec" data-product-id="{{ ci.id }}">−</button>
+                            <input class="qty__input" type="number" min="1" value="{{ ci.quantity }}" data-qty-for="{{ ci.id }}" />
+                            <button class="qty__btn js-qty" type="button" data-action="inc" data-product-id="{{ ci.id }}">+</button>
+                        </div>
+                        <button class="link link--danger js-remove" type="button" data-url="{% url 'remove_from_cart' ci.id %}">
+                            Видалити
+                        </button>
+                    </div>
+                </div>
+                <div class="item__price">
+                    <div class="money">₴ <span data-item-total-for="{{ ci.id }}">{{ ci.item_total }}</span></div>
+                    <div class="muted">₴ {{ ci.price }} за 1 шт.</div>
+                </div>
         </article>
-        {% empty %}
-            <p>Кошик порожній</p>
+            {% empty %}
+                <p>Кошик порожній</p>
         {% endfor %}
     </div>
-    {% endif %}
 
     <div class="cart__summary">
         <div class="row">

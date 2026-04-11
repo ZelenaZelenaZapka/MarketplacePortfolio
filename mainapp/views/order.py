@@ -4,6 +4,8 @@ from django.views.decorators.http import require_POST
 
 from ..models import Product, Customer, Cart, CartItem
 
+import json
+
 
 def _get_customer(request):
     if not request.user.is_authenticated:
@@ -205,12 +207,6 @@ def remove_from_cart(request, product_id):
     return JsonResponse({"success": True})
 
 
-from django.http import JsonResponse
-from django.views.decorators.http import require_POST
-import json
-
-from ..models import Product, Customer, Cart, CartItem
-from .order import _get_customer, _get_or_create_cart, get_cart_data  # або просто напряму якщо в тому ж файлі
 
 @require_POST
 def change_quantity(request, product_id):
