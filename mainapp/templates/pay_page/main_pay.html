@@ -1,22 +1,15 @@
 {% load static %}
-
-AUTH={{ user.is_authenticated }}
-CART_ITEMS={{ cart_items|length }}
-
 <!DOCTYPE html>
 <html lang="uk">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Оплата — Marketplace</title>
-
-  <!-- Підключи свій існуючий global/main css якщо є -->
-  <!-- <link rel="stylesheet" href="styles/main.css"> -->
-
   <link rel="stylesheet" href="{% static 'css/pay.css' %}" />
 </head>
 <body>
   <header class="topbar">
+    <header class="topbar">
     <div class="container topbar__inner">
       <a class="brand" href="#">
         <span class="brand__mark">MP</span>
@@ -36,47 +29,56 @@ CART_ITEMS={{ cart_items|length }}
   </header>
 
   <main class="container page">
-    <!-- ЛІВА ЧАСТИНА: кошик -->
-    
     {% include 'pay_page/carts_item.html' %}
 
-    <!-- ПРАВА ЧАСТИНА: форма -->
     <section class="panel checkout">
       <div class="panel__head">
         <h2 class="panel__title">Дані для доставки</h2>
         <div class="panel__subtitle">Заповніть форму — це займе менше хвилини</div>
       </div>
 
-      <form class="form" action="#" method="post">
+      <form class="form" id="main-checkout-form" method="post">
+        {% csrf_token %}
         <div class="grid">
-          <label class="field">
-            <span class="field__label">Прізвище</span>
-            <input class="input" name="lastName" type="text" placeholder="Напр. Шевченко" required />
-          </label>
+          
+          {# ПОЛЯ ТІЛЬКИ ДЛЯ ГОСТЕЙ #}
+          {% if not user.is_authenticated %}
+            <label class="field">
+              <span class="field__label">Прізвище</span>
+              <input class="input" name="lastName" type="text" placeholder="Напр. Шевченко" required />
+            </label>
+            <label class="field">
+              <span class="field__label">Імʼя</span>
+              <input class="input" name="firstName" type="text" placeholder="Напр. Олена" required />
+            </label>
+            <label class="field">
+              <span class="field__label">Номер</span>
+              <input class="input" name="phone" type="tel" placeholder="+380 XX XXX XX XX" required />
+            </label>
+            <label class="field">
+              <span class="field__label">Пошта</span>
+              <input class="input" name="email" type="email" placeholder="name@email.com" required />
+            </label>
+          {% endif %}
 
-          <label class="field">
-            <span class="field__label">Імʼя</span>
-            <input class="input" name="firstName" type="text" placeholder="Напр. Олена" required />
-          </label>
-
-          <label class="field">
-            <span class="field__label">Номер</span>
-            <input class="input" name="phone" type="tel" placeholder="+380 XX XXX XX XX" required />
-          </label>
-
-          <label class="field">
-            <span class="field__label">Пошта</span>
-            <input class="input" name="email" type="email" placeholder="name@email.com" required />
-          </label>
-
-          <label class="field field--full">
-            <span class="field__label">Адрес</span>
+          {# БЛОК АДРЕСИ (для кур'єра) #}
+          <label class="field field--full" id="delivery-address-field">
+            <span class="field__label">Адреса</span>
             <input class="input" name="address" type="text" placeholder="Місто, вулиця, будинок, квартира" required />
+          </label>
+
+          {# БЛОК МАГАЗИНІВ (для самовивозу - спочатку прихований) #}
+          <label class="field field--full" id="pickup-store-field" style="display: none;">
+            <span class="field__label">Оберіть точку видачі</span>
+            <select class="input" name="store_id">
+                <option value="1">Центральний склад (вул. Перемоги, 10)</option>
+                <option value="2">Магазин "МР" (пр. Свободи, 5)</option>
+            </select>
           </label>
 
           <label class="field field--full">
             <span class="field__label">Коментар</span>
-            <textarea class="input textarea" name="comment" rows="4" placeholder="Напр. Домофон не працює, зателефонуйте перед доставкою"></textarea>
+            <textarea class="input textarea" name="comment" rows="4" placeholder="Напр. Домофон не працює"></textarea>
           </label>
         </div>
 
@@ -93,12 +95,11 @@ CART_ITEMS={{ cart_items|length }}
               </span>
               <span class="choice__price">₴ 99</span>
             </label>
-
             <label class="choice">
               <input type="radio" name="delivery" value="pickup" />
               <span class="choice__box">
                 <span class="choice__title">Самовивіз</span>
-                <span class="choice__desc">З найближчого пункту (сьогодні/завтра)</span>
+                <span class="choice__desc">З найближчого пункту</span>
               </span>
               <span class="choice__price">₴ 0</span>
             </label>
@@ -114,38 +115,33 @@ CART_ITEMS={{ cart_items|length }}
                 <span class="choice__title">Карткою онлайн</span>
                 <span class="choice__desc">Visa / MasterCard</span>
               </span>
-              <span class="choice__badge">Рекомендовано</span>
             </label>
-
             <label class="choice">
               <input type="radio" name="payment" value="cash" />
               <span class="choice__box">
                 <span class="choice__title">При отриманні</span>
                 <span class="choice__desc">Готівка або картка</span>
               </span>
-              <span class="choice__badge">Без передплати</span>
             </label>
           </div>
 
-          <div class="cardbox">
+          {# ТВОЯ КРАСИВА ФОРМА КАРТИ #}
+          <div class="cardbox" id="card-form-wrapper">
             <div class="cardbox__row">
               <label class="field field--full">
                 <span class="field__label">Номер картки</span>
-                <input class="input" inputmode="numeric" placeholder="0000 0000 0000 0000" />
+                <input class="input" name="card_number" inputmode="numeric" placeholder="0000 0000 0000 0000" />
               </label>
             </div>
             <div class="cardbox__row cardbox__row--2">
               <label class="field">
                 <span class="field__label">Термін</span>
-                <input class="input" inputmode="numeric" placeholder="MM/YY" />
+                <input class="input" name="card_expiry" inputmode="numeric" placeholder="MM/YY" />
               </label>
               <label class="field">
                 <span class="field__label">CVV</span>
-                <input class="input" inputmode="numeric" placeholder="***" />
+                <input class="input" name="card_cvv" inputmode="numeric" placeholder="***" />
               </label>
-            </div>
-            <div class="muted small">
-              Ваші платіжні дані не зберігаються (демо-форма для портфоліо).
             </div>
           </div>
         </div>
@@ -153,107 +149,18 @@ CART_ITEMS={{ cart_items|length }}
         <div class="actions">
           <label class="agree">
             <input type="checkbox" required />
-            <span>Погоджуюсь з умовами та політикою конфіденційності</span>
+            <span>Погоджуюсь з умовами</span>
           </label>
 
-          <button class="btn btn--primary" type="submit">
-            Підтвердити та оплатити
-            <strong>₴ {{ total_price }}</strong>
-          </button>
+            <button class="btn btn--primary" type="submit" id="submit-order">
+              Підтвердити та оплатити <strong id="button-total-price">₴ {{ total_price }}</strong>
+            </button>
 
-          <a class="btn btn--ghost" href="catalog.html">Повернутися в каталог</a>
         </div>
       </form>
     </section>
   </main>
 
-  <footer class="footer">
-    <div class="container footer__inner">
-      <div class="muted">© Marketplace • 2026</div>
-      <div class="footer__right">
-        <span class="pill">Підтримка: support@marketplace.local</span>
-        <span class="pill">Повернення 14 днів</span>
-      </div>
-    </div>
-  </footer>
+  <script src="{% static 'js/pay.js' %}"></script>
 </body>
-
-  <script>
-    function getCookie(name) {
-      const value = `; ${document.cookie}`;
-      const parts = value.split(`; ${name}=`);
-      if (parts.length === 2) return parts.pop().split(';').shift();
-    }
-
-    document.addEventListener('click', async (e) => {
-      const btn = e.target.closest('.js-remove');
-      if (!btn) return;
-
-      const url = btn.dataset.url;
-      const csrfToken = getCookie('csrftoken');
-
-      try {
-        const res = await fetch(url, {
-          method: 'POST',
-          headers: {
-            'X-CSRFToken': csrfToken,
-            'X-Requested-With': 'XMLHttpRequest',
-          }
-        });
-
-        const data = await res.json();
-        if (data.success) {
-          location.reload();
-        } else {
-          alert(data.error || 'Не вдалося видалити товар');
-        }
-      } catch (err) {
-        console.error(err);
-        alert('Помилка мережі при видаленні');
-      }
-    });
-
-      function getCookie(name) {
-      const v = `; ${document.cookie}`;
-      const parts = v.split(`; ${name}=`);
-      if (parts.length === 2) return parts.pop().split(';').shift();
-    }
-
-    document.addEventListener('click', async (e) => {
-      const btn = e.target.closest('.js-qty');
-      if (!btn) return;
-
-      const productId = btn.dataset.productId;
-      const action = btn.dataset.action;
-
-      const res = await fetch(`/cart/qty/${productId}/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': getCookie('csrftoken')
-        },
-        body: JSON.stringify({ action })
-      });
-
-      const data = await res.json();
-
-      if (data.quantity === 0) {
-        const item = document.querySelector(`[data-product-id="${productId}"]`);
-        if (item) item.remove();
-      } else {
-        document.querySelector(`[data-qty-for="${productId}"]`).value = data.quantity;
-
-        document.querySelector(`[data-item-total-for="${productId}"]`).textContent = data.item_total;
-      }
-
-      document.getElementById('cart-goods-total').textContent = data.total_price;
-      document.getElementById('cart-grand-total').textContent = data.total_price;
-    });
-
-  </script>
-
 </html>
-
-
-
-

@@ -44,6 +44,8 @@ media/
 .env
 .env.*
 
+key.py
+
 .secretkey
 
 # Testing / coverage

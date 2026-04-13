@@ -1,0 +1,63 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дякуємо! — Marketplace</title>
+    
+    <!-- Підключаємо CSS -->
+    <link rel="stylesheet" href="{% static 'css/thanks.css' %}">
+</head>
+<body>
+
+    <!-- Салют на задньому фоні -->
+    <canvas id="fireworks"></canvas>
+
+    <!-- Topbar (як у всьому сайті) -->
+    <div class="topbar">
+        <a href="/" class="logo">Marketplace</a>
+    </div>
+
+    <div class="container">
+        <div class="thanks-panel">
+            
+            <!-- Іконка успіху -->
+            <div class="success-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+
+            <h1>Дякуємо за покупку! 🎉</h1>
+            <p>Ваше замовлення успішно оплачено.<br>Ми вже готуємо його до відправки.</p>
+
+            <div class="order-info">
+                <strong>Номер замовлення:</strong> #MP-784392<br>
+                <strong>Сума:</strong> 1 249 грн<br>
+                <strong>Статус:</strong> <span style="color: #22c55e;">Оплачено ✓</span>
+            </div>
+
+            <p style="color: var(--muted); font-size: 15px;">
+                Підтвердження та деталі надіслано на вашу пошту.<br>
+                Очікуйте трек-номер протягом 1–2 годин.
+            </p>
+
+            <a href="{% url 'store' %}" class="btn btn--primary">Повернутися на головну</a>
+            <!-- <a href="/dashboard" class="btn" style="margin-left: 12px;">Перейти в особистий кабінет</a> -->
+
+            <div style="margin-top: 40px; font-size: 13px; color: var(--muted);">
+                Якщо виникли питання — пишіть у <a href="#" style="color: var(--brand2);">чат підтримки</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        © 2026 Marketplace • Усі права захищено
+    </div>
+
+    <!-- Підключаємо JS (салют) -->
+    <script src="{% static 'js/thanks.js' %}"></script>
+</body>
+</html>
