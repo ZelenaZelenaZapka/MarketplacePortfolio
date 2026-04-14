@@ -18,6 +18,9 @@
       <div class="user-box">
         {{ user.first_name|default:user.username }}
       </div>
+
+      <a href="{% url 'logout' %}" class="btn btn-primary">Вийти</a>
+
     {% else %}
       <a href="{% url 'reg' %}?tab=login" class="btn btn-secondary">Увійти</a>
       <a href="{% url 'reg' %}?tab=register" class="btn btn-primary">Зареєструватися</a>

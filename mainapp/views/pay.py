@@ -86,3 +86,4 @@ def pay_render(request):
                 })
 
     return render(request, "pay_page/main_pay.html", context=data_context)
+
