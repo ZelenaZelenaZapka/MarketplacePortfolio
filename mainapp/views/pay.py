@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.db import transaction
 from .order import get_cart_data
-from ..models import Order, OrderItem, Payment, Product, Customer
+from ..models import Order, OrderItem, Payment, Product, Customer, Cart
 
 def thanks_page(request):
     return render(request, "pay_page/thanks.html")
@@ -71,13 +71,16 @@ def pay_render(request):
                 status='pending'
             )
 
-            # 6. Очищуємо кошик (залежно від того, як він у тебе реалізований)
-            # if not request.user.is_authenticated:
-            #     if 'cart' in request.session:
-            #         request.session['cart'] = {}
-            # else:
-            #     # Якщо в тебе кошик в БД для залогінених (моделі Cart/CartItem)
-            #     data_context['cart'].items.all().delete()
+            # 6. Очищуємо кошик після успішного замовлення
+            if request.user.is_authenticated:
+                # Якщо юзер залогінений, шукаємо його Кошик в БД через профіль Customer
+                # Це безпечно: якщо у юзера немає профілю Customer, нічого не видалиться і помилки не буде
+                Cart.objects.filter(customer__user=request.user).delete()
+            else:
+                # Якщо юзер гість, просто видаляємо дані з сесії
+                if 'cart' in request.session:
+                    del request.session['cart']
+                request.session.modified = True  # Повідомляємо Django, що сесію треба зберегти
 
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
                 return JsonResponse({

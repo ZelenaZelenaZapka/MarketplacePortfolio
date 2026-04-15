@@ -8,15 +8,13 @@
   </a>
 
   <div class="nav-actions">
-    <button class="btn btn-secondary">Каталог</button>
-
     {% if user.is_authenticated %}
       {% if is_seller %}
         <a href="{% url 'dashboard' %}" class="btn btn-primary">Панель продавця</a>
       {% endif %}
 
       <div class="user-box">
-        {{ user.first_name|default:user.username }}
+        <button class="btn btn-secondary">{{ user.first_name|default:user.username }}</button>
       </div>
 
       <a href="{% url 'logout' %}" class="btn btn-primary">Вийти</a>
