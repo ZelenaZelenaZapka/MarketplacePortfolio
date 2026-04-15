@@ -274,40 +274,15 @@ select {
   gap: 12px;
 }
 
-.history-item {
-  display: grid;
-  grid-template-columns: 52px 1fr;
-  gap: 12px;
-  align-items: center;
-  padding: 12px;
-  border-radius: 16px;
-  border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.025);
-  transition: 0.2s ease;
-}
+
 
 .history-item:hover {
   background: rgba(255, 255, 255, 0.05);
   border-color: rgba(110, 168, 254, 0.22);
 }
 
-.history-thumb {
-  width: 52px;
-  height: 52px;
-  border-radius: 14px;
-  display: grid;
-  place-items: center;
-  font-size: 22px;
-  background:
-    linear-gradient(135deg, rgba(110, 168, 254, 0.18), rgba(139, 92, 246, 0.12)),
-    linear-gradient(180deg, #182231, #10161f);
-}
 
-.history-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
+
 
 .history-info strong {
   font-size: 14px;
@@ -810,3 +785,4 @@ select {
 .cart-note {
   margin-top: 14px;
 }
+

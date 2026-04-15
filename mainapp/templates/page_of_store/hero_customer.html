@@ -1,5 +1,8 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/hero_customer.css' %}" />
+
 <section class="hero">
-      <div class="container hero-grid">
+    <div class="container hero-grid">
         <div class="hero-main">
             <span class="pill">● Новий формат маркетплейсу</span>
             <h1>Один каталог. Багато продавців. Зручний досвід для покупця.</h1>
@@ -63,30 +66,34 @@
             </div>
             </div>
 
-            <div class="history-block">
-            <div class="history-head">
-                <h3>Останні покупки</h3>
-                <a href="#">Мої замовлення</a>
-            </div>
+            {% if recent_purchased_products %}
+                <div class="history-block">
+                    <div class="history-head">
+                        <h3>Останні покупки</h3>
+                        <a href="#">Мої замовлення</a>
+                    </div>
 
-            <div class="history-list">
-                <article class="history-item">
-                <div class="history-thumb">👟</div>
-                <div class="history-info">
-                    <strong>Motion Runner</strong>
-                    <span>StreetOne • 3 450 ₴</span>
+                    <div class="history-list">
+                        {% for product in recent_purchased_products %}
+                        <a href="#" class="history-item"> <!-- ✅ Тимчасово без посилання -->
+                            <div class="history-thumb">
+                                {% if product.image %}
+                                    <img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
+                                {% else %}
+                                    📦
+                                {% endif %}
+                            </div>
+                            <div class="history-info">
+                                <strong>{{ product.name }}</strong>
+                                <span>{{ product.store.name }} • {{ product.price }} ₴</span>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
                 </div>
-                </article>
-
-                <article class="history-item">
-                <div class="history-thumb">🪑</div>
-                <div class="history-info">
-                    <strong>Nordic Soft</strong>
-                    <span>LoftZone • 6 999 ₴</span>
-                </div>
-                </article>
-            </div>
-            </div>
+            {% endif %}
         </aside>
-        </div>
-    </section>
+    </div>
+</section>
+
+
