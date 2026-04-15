@@ -1,21 +1,15 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Дякуємо! — Marketplace</title>
-    
-    <!-- Підключаємо CSS -->
     <link rel="stylesheet" href="{% static 'css/thanks.css' %}">
 </head>
 <body>
-
-    <!-- Салют на задньому фоні -->
     <canvas id="fireworks"></canvas>
 
-    <!-- Topbar (як у всьому сайті) -->
     <div class="topbar">
         <a href="/" class="logo">Marketplace</a>
     </div>
@@ -23,33 +17,43 @@
     <div class="container">
         <div class="thanks-panel">
             
-            <!-- Іконка успіху -->
-            <div class="success-icon">
-                <svg viewBox="0 0 24 24">
-                    <path d="M5 13l4 4L19 7" />
-                </svg>
-            </div>
+            {% if error %}
+                <!-- ПОМИЛКА -->
+                <div class="error-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                    </svg>
+                </div>
+                <h1>Помилка 😔</h1>
+                <p>{{ error }}</p>
+                <a href="{% url 'store' %}" class="btn btn--primary">Повернутися на головну</a>
+            {% else %}
+                <!-- УСПІХ -->
+                <div class="success-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M5 13l4 4L19 7" />
+                    </svg>
+                </div>
 
-            <h1>Дякуємо за покупку! 🎉</h1>
-            <p>Ваше замовлення успішно оплачено.<br>Ми вже готуємо його до відправки.</p>
+                <h1>Дякуємо за покупку! 🎉</h1>
+                <p>Ваше замовлення успішно оплачено.<br>Ми вже готуємо його до відправки.</p>
 
-            <div class="order-info">
-                <strong>Номер замовлення:</strong> #MP-784392<br>
-                <strong>Сума:</strong> 1 249 грн<br>
-                <strong>Статус:</strong> <span style="color: #22c55e;">Оплачено ✓</span>
-            </div>
+                <div class="order-info">
+                    <strong>Номер замовлення:</strong> #MP-{{ order_id }}<br>
+                    <strong>Сума:</strong> {{ total_price|floatformat:2 }} грн<br>
+                </div>
 
-            <p style="color: var(--muted); font-size: 15px;">
-                Підтвердження та деталі надіслано на вашу пошту.<br>
-                Очікуйте трек-номер протягом 1–2 годин.
-            </p>
+                <p style="color: var(--muted); font-size: 15px;">
+                    Підтвердження та деталі надіслано на вашу пошту.<br>
+                    Очікуйте трек-номер протягом 1–2 годин.
+                </p>
 
-            <a href="{% url 'store' %}" class="btn btn--primary">Повернутися на головну</a>
-            <!-- <a href="/dashboard" class="btn" style="margin-left: 12px;">Перейти в особистий кабінет</a> -->
+                <a href="{% url 'store' %}" class="btn btn--primary">Повернутися на головну</a>
 
-            <div style="margin-top: 40px; font-size: 13px; color: var(--muted);">
-                Якщо виникли питання — пишіть у <a href="#" style="color: var(--brand2);">чат підтримки</a>
-            </div>
+                <div style="margin-top: 40px; font-size: 13px; color: var(--muted);">
+                    Якщо виникли питання — пишіть у <a href="#" style="color: var(--brand2);">чат підтримки</a>
+                </div>
+            {% endif %}
         </div>
     </div>
 
@@ -57,7 +61,7 @@
         © 2026 Marketplace • Усі права захищено
     </div>
 
-    <!-- Підключаємо JS (салют) -->
     <script src="{% static 'js/thanks.js' %}"></script>
 </body>
 </html>
+

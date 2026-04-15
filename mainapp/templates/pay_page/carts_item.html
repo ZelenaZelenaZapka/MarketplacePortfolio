@@ -33,9 +33,9 @@
                     <div class="money">₴ <span data-item-total-for="{{ ci.id }}">{{ ci.item_total }}</span></div>
                     <div class="muted">₴ {{ ci.price }} за 1 шт.</div>
                 </div>
-        </article>
-            {% empty %}
-                <p>Кошик порожній</p>
+            </article>
+        {% empty %}
+            <p>Кошик порожній</p>
         {% endfor %}
     </div>
 
@@ -48,24 +48,13 @@
             </div>
         </div>
         <div class="divider"></div>
-        <div class="totals">
-            <div class="totals__row">
-                <span class="muted">Товари</span>
-                <strong>₴ <span id="cart-goods-total">{{ total_price }}</span></strong>
-            </div>
-            <div class="totals__row">
-                <span class="muted">Доставка</span>
-                <span>₴ 99</span>
-            </div>
-            <div class="totals__row totals__row--bold">
-                <span>Разом</span>
-                <strong>₴ <span id="cart-grand-total">{{ total_price }}</span></strong>
-            </div>
+        <div class="totals__row totals__row--bold">
+            <span>Разом</span>
+            <!-- ДОДАВ ID: сюди будемо писати загальну суму -->
+            <strong>₴ <span id="cart-grand-total">{{ total_price }}</span></strong>
         </div>
         <div class="hint">
             Підказка: доставка безкоштовна від <b>₴ 3 000</b>.
         </div>
     </div>
 </aside>
-
-

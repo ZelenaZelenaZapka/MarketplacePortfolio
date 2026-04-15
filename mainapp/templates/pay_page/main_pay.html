@@ -7,9 +7,9 @@
   <title>Оплата — Marketplace</title>
   <link rel="stylesheet" href="{% static 'css/pay.css' %}" />
 </head>
-<body>
+<!-- ДОДАВ data-base-total: це критично для JS -->
+<body data-base-total="{{ total_price }}">
   <header class="topbar">
-    <header class="topbar">
     <div class="container topbar__inner">
       <a class="brand" href="#">
         <span class="brand__mark">MP</span>
@@ -18,8 +18,7 @@
 
       <nav class="nav">
         <a class="nav__link" href="{% url 'store' %}">Каталог</a>
-        <a class="nav__link" href="account.html">Акаунт</a>
-        <a class="nav__link" href="orders.html">Попередні замовлення</a>
+        <a class="nav__link" href="">Попередні замовлення</a>
       </nav>
 
       <div class="topbar__secure">
@@ -67,7 +66,7 @@
             <input class="input" name="address" type="text" placeholder="Місто, вулиця, будинок, квартира" required />
           </label>
 
-          {# БЛОК МАГАЗИНІВ (для самовивозу - спочатку прихований) #}
+          {# БЛОК МАГАЗИНІВ (для самовивозу) #}
           <label class="field field--full" id="pickup-store-field" style="display: none;">
             <span class="field__label">Оберіть точку видачі</span>
             <select class="input" name="store_id">
@@ -125,7 +124,6 @@
             </label>
           </div>
 
-          {# ТВОЯ КРАСИВА ФОРМА КАРТИ #}
           <div class="cardbox" id="card-form-wrapper">
             <div class="cardbox__row">
               <label class="field field--full">
@@ -152,10 +150,9 @@
             <span>Погоджуюсь з умовами</span>
           </label>
 
-            <button class="btn btn--primary" type="submit" id="submit-order">
-              Підтвердити та оплатити <strong id="button-total-price">₴ {{ total_price }}</strong>
-            </button>
-
+          <button class="btn btn--primary" type="submit" id="submit-order">
+            Оплатити без доставки <strong id="button-total-price">₴ {{ total_price|floatformat:2 }}</strong>
+          </button>
         </div>
       </form>
     </section>

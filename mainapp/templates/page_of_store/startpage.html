@@ -28,156 +28,25 @@
 
   <main>
     {% block content %}
-
-     {% include 'page_of_store/itemcard.html' %}
-
+        {% include 'page_of_store/itemcard.html' %}
     {% endblock %}
   </main>
 
   {% block extra_js %}{% endblock %}
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const forms = document.querySelectorAll('.add-to-cart-form');
-        const cartDataUrl = "{% url 'cart_data' %}";
-
-        function getCsrfToken() {
-            const csrfInput = document.querySelector('[name=csrfmiddlewaretoken]');
-            return csrfInput ? csrfInput.value : '';
-        }
-
-        function updateOrderBtnVisibility() {
-            const cartItems = document.querySelectorAll('#cart-list .cart-item');
-            const btn = document.querySelector('.js-order-btn');
-            if (!btn) return;
-            if (cartItems.length > 0) {
-                btn.removeAttribute('hidden');
-                btn.style.display = '';
-            } else {
-                btn.setAttribute('hidden', 'true');
-                btn.style.display = 'none';
-            }
-        }
-
-        function renderCart(data) {
-            const cartList = document.getElementById('cart-list');
-            const cartCountText = document.querySelector('.cart-count-text');
-            const cartTotalPrice = document.getElementById('cart-total-price');
-            if (cartCountText) {
-                cartCountText.textContent = data.cart_count;
-            }
-            if (cartTotalPrice) {
-                cartTotalPrice.textContent = data.total_price;
-            }
-            if (!cartList) return;
-
-            if (!data.cart_items.length) {
-                cartList.innerHTML = `<p class="muted">Кошик порожній</p>`;
-                updateOrderBtnVisibility();
-                return;
-            }
-
-            let itemsHtml = '';
-            data.cart_items.forEach(item => {
-                const imageUrl = item.image_url ? item.image_url : '/static/img/product-placeholder.png';
-                itemsHtml += `
-                    <div class="cart-item">
-                        <div class="cart-thumb">
-                            <img src="${imageUrl}" alt="${item.name}">
-                        </div>
-                        <div class="cart-info">
-                            <h4>${item.name}</h4>
-                            <p>${item.quantity} × ${item.price} ₴</p>
-                        </div>
-                        <div class="cart-side">
-                            <strong>${item.item_total} ₴</strong>
-                            <button class="remove-btn" type="button" data-product-id="${item.id}">×</button>
-                        </div>
-                    </div>
-                `;
-            });
-            cartList.innerHTML = itemsHtml;
-            updateOrderBtnVisibility();
-        }
-
-        function loadCartData() {
-            fetch(cartDataUrl, {
-                method: 'GET',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    renderCart(data);
-                } else {
-                    console.error('Не вдалося завантажити кошик');
-                }
-            })
-            .catch(error => {
-                console.error('Помилка завантаження кошика:', error);
-            });
-        }
-
-        forms.forEach(form => {
-            const button = form.querySelector('.add-to-cart');
-            const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
-            const url = form.action;
-
-            button.addEventListener('click', function () {
-                fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': csrfToken,
-                        'X-Requested-With': 'XMLHttpRequest',
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        loadCartData();
-                    } else {
-                        console.error(data.error);
-                    }
-                })
-                .catch(error => {
-                    console.error('Помилка:', error);
-                });
-            });
-        });
-
-        document.addEventListener('click', function (event) {
-            const removeButton = event.target.closest('.remove-btn');
-            if (!removeButton) return;
-            const productId = removeButton.dataset.productId;
-            fetch(`/cart/remove/${productId}/`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': getCsrfToken(),
-                    'X-Requested-With': 'XMLHttpRequest',
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    loadCartData();
-                } else {
-                    console.error(data.error);
-                }
-            })
-            .catch(error => {
-                console.error('Помилка видалення:', error);
-            });
-        });
-
-        // Перше завантаження
-        loadCartData();
-    });
-</script>
+  <script>
+    window.MarketHub = {
+      cartDataUrl: "{% url 'cart_data' %}",
+      removeUrlBase: "/cart/remove/"
+    };
+  </script>
+  <script src="{% static 'js/script_for_startpage.js' %}"></script>
 
 </body>
-<link rel="script" href="{% static 'js/script_for_startpage.js' %}" />
 </html>
+
+
+
+
 
 

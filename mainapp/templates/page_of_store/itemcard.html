@@ -106,14 +106,14 @@
                     {% endif %}
                   </span>
                 </div>
-
-								<form class="add-to-cart-form" action="{% url 'add_to_cart' product.id %}">
-									{% csrf_token %}
-									<button class="btn btn-primary add-to-cart" type="button">
-											В кошик
-									</button>
-								</form>
-
+                <form class="add-to-cart-form" action="{% url 'add_to_cart' product.id %}">
+                  {% csrf_token %}
+                  {% if not is_seller %}
+                    <button class="btn btn-primary add-to-cart" type="button">
+                        В кошик
+                    </button>
+                  {% endif %}
+                </form>
               </div>
             </div>
           </article>
@@ -122,40 +122,39 @@
         {% endfor %}
       </div>
     </section>
-
-
-			<!-- КОШИК -->
-    <aside class="panel cart">
-      <div class="cart-header">
-        <div>
-          <h3 class="panel-title">Кошик</h3>
-          <p class="muted">
-            <span class="cart-count-text">0</span> товар(ів) додано
-          </p>
+    {% if not is_seller %}
+      <aside class="panel cart">
+        <div class="cart-header">
+          <div>
+            <h3 class="panel-title">Кошик</h3>
+            <p class="muted">
+              <span class="cart-count-text">0</span> товар(ів) додано
+            </p>
+          </div>
         </div>
-      </div>
 
-      <div class="cart-list" id="cart-list">
-        <p class="muted">Кошик порожній</p>
-      </div>
-
-      <div class="cart-summary">
-        <div class="cart-row">
-          <span>Сума товарів</span>
-          <strong id="cart-total-price">0</strong>
+        <div class="cart-list" id="cart-list">
+          <p class="muted">Кошик порожній</p>
         </div>
-        <div class="cart-row">
-          <span>Доставка</span>
-          <strong>Безкоштовно</strong>
-        </div>
-      </div>
 
-      <div class="cart-actions">
-        <a class="btn btn-primary js-order-btn" href="{% url 'pay_render' %}" style="display:none;" hidden>
-          Оформити замовлення
-        </a>
-      </div>
-    </aside>
+        <div class="cart-summary">
+          <div class="cart-row">
+            <span>Сума товарів</span>
+            <strong id="cart-total-price">0</strong>
+          </div>
+          <div class="cart-row">
+            <span>Доставка</span>
+            <strong>Безкоштовно</strong>
+          </div>
+        </div>
+
+        <div class="cart-actions">
+          <a class="btn btn-primary js-order-btn" href="{% url 'pay_render' %}" style="display:none;" hidden>
+            Оформити замовлення
+          </a>
+        </div>
+      </aside>
+    {% endif %}
   </section>
 
 </main>
