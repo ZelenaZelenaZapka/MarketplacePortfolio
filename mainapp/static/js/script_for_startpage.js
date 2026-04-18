@@ -100,27 +100,42 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ===== Form submit (add to cart) =====
-  forms.forEach(form => {
+  document.addEventListener('submit', function (e) {
+    // Перевіряємо, чи це форма додавання в кошик
+    const form = e.target.closest('.add-to-cart-form');
+    if (!form) return;
+
+    e.preventDefault(); 
     const button = form.querySelector('.add-to-cart');
     const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]')?.value || '';
     const url = form.action;
 
-    button?.addEventListener('click', function (e) {
-      e.preventDefault();
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          'X-CSRFToken': csrfToken,
-          'X-Requested-With': 'XMLHttpRequest'
-        }
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) loadCartData();
-        else console.error(data.error);
-      })
-      .catch(err => console.error('Помилка:', err));
-    });
+    if (button) {
+      const originalText = button.textContent;
+      button.textContent = "Додано";
+      button.disabled = true;
+      setTimeout(() => {
+        button.textContent = originalText;
+        button.disabled = false;
+      }, 900);
+    }
+
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': csrfToken,
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        loadCartData(); // Оновлюємо кошик після успіху
+      } else {
+        console.error(data.error);
+      }
+    })
+    .catch(err => console.error('Помилка:', err));
   });
 
   // ===== Remove from cart (delegate) =====
@@ -146,4 +161,5 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // ===== Init =====
   loadCartData();
-});
+});   
+

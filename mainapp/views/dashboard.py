@@ -5,7 +5,6 @@ from django.utils.text import slugify
 from ..models import Seller, Store, Product
 from ..forms import ProductForm
 
-
 @login_required
 def dashboard(request):
     try:
