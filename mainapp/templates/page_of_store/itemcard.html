@@ -31,32 +31,31 @@
         </div>
 
         <div class="filter-group">
-        <label>Популярні теги</label>
-        <div class="chips">
-          
-          <label class="chip {% if request.GET.new %}active{% endif %}" style="cursor: pointer;">
-            <input type="checkbox" name="new" value="1" 
-                  {% if request.GET.new %}checked{% endif %} 
-                  style="position: absolute; opacity: 0; width: 0; height: 0;">
-            В наявності
-          </label>
+          <label>Популярні теги</label>
+          <div class="chips">
+            
+            <label class="chip {% if request.GET.new %}active{% endif %}" style="cursor: pointer;">
+              <input type="checkbox" name="new" value="1" 
+                    {% if request.GET.new %}checked{% endif %} 
+                    style="position: absolute; opacity: 0; width: 0; height: 0;">
+              В наявності
+            </label>
 
-          <label class="chip {% if request.GET.sale %}active{% endif %}" style="cursor: pointer;">
-            <input type="checkbox" name="sale" value="1" 
-                  {% if request.GET.sale %}checked{% endif %}
-                  style="position: absolute; opacity: 0; width: 0; height: 0;">
-            Зі знижкою
-          </label>
+            <label class="chip {% if request.GET.sale %}active{% endif %}" style="cursor: pointer;">
+              <input type="checkbox" name="sale" value="1" 
+                    {% if request.GET.sale %}checked{% endif %}
+                    style="position: absolute; opacity: 0; width: 0; height: 0;">
+              Зі знижкою
+            </label>
 
-          <label class="chip {% if request.GET.top %}active{% endif %}" style="cursor: pointer;">
-            <input type="checkbox" name="top" value="1" 
-                  {% if request.GET.top %}checked{% endif %}
-                  style="position: absolute; opacity: 0; width: 0; height: 0;">
-            Топ
-          </label>
-          
+            <label class="chip {% if request.GET.top %}active{% endif %}" style="cursor: pointer;">
+              <input type="checkbox" name="top" value="1" 
+                    {% if request.GET.top %}checked{% endif %}
+                    style="position: absolute; opacity: 0; width: 0; height: 0;">
+              Топ
+            </label>
+            </div>
         </div>
-      </div>
 
         {% if request.GET %}
           <a href="?" class="btn btn-secondary full-width" style="margin-top: 8px; display: block; text-align: center;">Скинути</a>
@@ -123,7 +122,9 @@
         </div>
 
         <div class="cart-actions">
-          <a class="btn btn-primary js-order-btn" href="{% url 'pay_render' %}" style="display:none;" hidden>
+          <a class="btn btn-primary js-order-btn" 
+            href="{% url 'pay_render' %}" 
+            style="display:none;">
             Оформити замовлення
           </a>
         </div>

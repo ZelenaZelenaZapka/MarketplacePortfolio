@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout
 from django.core.exceptions import ObjectDoesNotExist
-from ..models import Product, Customer, Order, Category
+from django.db.models import Count, Sum, F
+from django.http import JsonResponse
+from ..models import Product, Customer, Order, Category, Seller, Store, OrderItem
 from .order import get_cart_data
 
-
 def get_filtered_products(request):
-    qs = Product.objects.select_related('category')
-
+    qs = Product.objects.select_related('category', 'store')
+    
     search = request.GET.get('search', '').strip()
     if search:
         qs = qs.filter(name__icontains=search)
@@ -18,62 +19,74 @@ def get_filtered_products(request):
 
     price_min = request.GET.get('price_min')
     price_max = request.GET.get('price_max')
-    if price_min:
-        try: qs = qs.filter(price__gte=float(price_min))
-        except ValueError: pass
-    if price_max:
-        try: qs = qs.filter(price__lte=float(price_max))
-        except ValueError: pass
+    try:
+        if price_min: qs = qs.filter(price__gte=float(price_min))
+        if price_max: qs = qs.filter(price__lte=float(price_max))
+    except ValueError:
+        pass
 
-    if request.GET.get('new'): 
-        qs = qs.filter(is_active=True)
-
+    if request.GET.get('new'): qs = qs.filter(is_active=True)
     if request.GET.get('sale'): qs = qs.filter(has_discount=True)
     if request.GET.get('top'): qs = qs.filter(is_top=True)
 
     return qs.order_by('-created_at')
 
-
-def get_recent_purchased_products(user):
-    if not user.is_authenticated:
-        return []
+def get_seller_dashboard_data(request):
+    if not request.user.is_authenticated:
+        return {'is_seller': False}
 
     try:
-        customer = user.customer
-        orders = customer.orders.order_by('-created_at')[:5] \
-            .prefetch_related('items__product', 'items__product__store')
+        seller = Seller.objects.get(user=request.user)
+        user_stores = Store.objects.filter(seller_by=seller)
+        
+        if not user_stores.exists():
+            return {'is_seller': True, 'no_stores': True}
 
-        seen_ids = set()
-        products = []
-        for order in orders:
-            for item in order.items.all():
-                if item.product_id not in seen_ids:
-                    products.append(item.product)
-                    seen_ids.add(item.product_id)
-                if len(products) >= 2: break
-            if len(products) >= 2: break
-        return products
-    except ObjectDoesNotExist:
-        return []
+        selected_store_id = request.GET.get('store_id')
+        current_store = user_stores.filter(id=selected_store_id).first() if selected_store_id else user_stores.first()
 
+        if not current_store:
+            current_store = user_stores.first()
+
+        stats = {
+            'is_seller': True,
+            'stores': user_stores,
+            'current_store': current_store,
+            'products_count': Product.objects.filter(store=current_store).count(),
+            'orders_count': Order.objects.filter(items__product__store=current_store).distinct().count(),
+            'revenue': OrderItem.objects.filter(product__store=current_store).aggregate(
+                total=Sum(F('price') * F('quantity'))
+            )['total'] or 0,
+        }
+        return stats
+    except Seller.DoesNotExist:
+        return {'is_seller': False}
 
 def store_page(request):
+    products = get_filtered_products(request)
+    cart_data = get_cart_data(request)
+    
+    # Отримуємо дані продавця ОДИН раз
+    seller_data = get_seller_dashboard_data(request)
+    
     context = {
-        'products': get_filtered_products(request),
+        'products': products,
         'categories': Category.objects.all(),
-        'cart_item': get_cart_data(request),
-        'recent_purchased_products': get_recent_purchased_products(request.user),
-        'is_seller': request.user.groups.filter(name='seller').exists() if request.user.is_authenticated else False,
+        'cart_item': cart_data,
+        'is_seller': seller_data.get('is_seller', False),
+        **seller_data
     }
-    
-    if request.META.get('HTTP_HX_REQUEST'):
-        return render(request, "page_of_store/_product_grid.html", context)
-    
-    return render(request, "page_of_store/startpage.html", context)
 
+    # Обробка HTMX
+    if request.META.get('HTTP_HX_REQUEST'):
+        if 'store_id' in request.GET:
+            return render(request, "page_of_store/_seller_stats.html", context)
+        return render(request, "page_of_store/_product_grid.html", context)
+
+    return render(request, "page_of_store/startpage.html", context)
 
 def logout_view(request):
     logout(request)
-    return redirect('')
+    return redirect("")
 
 

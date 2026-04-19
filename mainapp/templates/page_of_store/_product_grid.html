@@ -1,5 +1,4 @@
 {% load static %}
-
 <div class="product-grid" id="product-list">
   {% for product in products %}
     <article class="product-card">
@@ -21,24 +20,23 @@
         <div class="product-bottom">
           <div class="price">
             <strong>{{ product.price }} ₴</strong>
-            <span>{% if product.is_active %}в наявності{% else %}немає{% endif %}</span>
           </div>
+          
+          {# Умова: показуємо кнопку, якщо це не продавець #}
           {% if not is_seller %}
             <form action="{% url 'add_to_cart' product.id %}" method="post" class="add-to-cart-form">
               {% csrf_token %}
-              <button class="btn btn-primary add-to-cart" type="submit">В кошик</button>
+              <button 
+                type="button" 
+                class="btn btn-primary add-to-cart" 
+                onclick="window.addToCart(this)"
+              >
+                В кошик
+              </button>
             </form>
           {% endif %}
         </div>
       </div>
     </article>
-  {% empty %}
-    <p style="grid-column: 1/-1; text-align:center; padding: 40px 0;">Товарів не знайдено</p>
   {% endfor %}
 </div>
-
-
-
-
-
-

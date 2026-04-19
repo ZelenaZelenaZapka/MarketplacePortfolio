@@ -1,0 +1,25 @@
+<div class="seller-metrics">
+    <div class="seller-card">
+        <span class="seller-card__label">Товари</span>
+        <strong class="seller-card__value">{{ products_count }}</strong>
+        <small class="seller-card__hint">активних позицій</small>
+    </div>
+
+    <div class="seller-card">
+        <span class="seller-card__label">Замовлення</span>
+        <strong class="seller-card__value">{{ orders_count }}</strong>
+        <small class="seller-card__hint">у магазині "{{ current_store.name }}"</small>
+    </div>
+
+    <div class="seller-card">
+        <span class="seller-card__label">Прибуток</span>
+        <strong class="seller-card__value">{{ revenue|floatformat:0 }} ₴</strong>
+        <small class="seller-card__hint">всього по магазину</small>
+    </div>
+
+    <div class="seller-card">
+        <span class="seller-card__label">Топ товар</span>
+        <strong class="seller-card__value">Nike Air</strong>
+        <small class="seller-card__hint">найбільше продажів</small>
+    </div>
+</div>
