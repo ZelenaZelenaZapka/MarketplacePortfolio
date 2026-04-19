@@ -43,22 +43,43 @@ def get_seller_dashboard_data(request):
             return {'is_seller': True, 'no_stores': True}
 
         selected_store_id = request.GET.get('store_id')
-        current_store = user_stores.filter(id=selected_store_id).first() if selected_store_id else user_stores.first()
+        current_store = user_stores.filter(id=selected_store_id).first() or user_stores.first()
 
-        if not current_store:
-            current_store = user_stores.first()
+        # 1. Загальна статистика
+        products_count = Product.objects.filter(store=current_store).count()
+        orders_count = Order.objects.filter(items__product__store=current_store).distinct().count()
+        
+        revenue = OrderItem.objects.filter(
+            product__store=current_store
+        ).aggregate(
+            total=Sum(F('price') * F('quantity'))
+        )['total'] or 0
 
-        stats = {
+
+        # ЛОГІКА ТОП ТОВАРУ
+        top_product_data = OrderItem.objects.filter(product__store=current_store) \
+            .values('product__name') \
+            .annotate(total_sold=Sum('quantity')) \
+            .order_by('-total_sold') \
+            .first()
+
+        if top_product_data:
+            top_product_name = top_product_data['product__name']
+            top_product_count = top_product_data['total_sold']
+        else:
+            top_product_name = "Немає продажів"
+            top_product_count = 0
+
+        return {
             'is_seller': True,
             'stores': user_stores,
             'current_store': current_store,
-            'products_count': Product.objects.filter(store=current_store).count(),
-            'orders_count': Order.objects.filter(items__product__store=current_store).distinct().count(),
-            'revenue': OrderItem.objects.filter(product__store=current_store).aggregate(
-                total=Sum(F('price') * F('quantity'))
-            )['total'] or 0,
+            'products_count': products_count,
+            'orders_count': orders_count,
+            'revenue': revenue,
+            'top_product_name': top_product_name,
+            'top_product_count': top_product_count, # Додали кількість
         }
-        return stats
     except Seller.DoesNotExist:
         return {'is_seller': False}
 

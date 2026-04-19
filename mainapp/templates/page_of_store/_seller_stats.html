@@ -19,7 +19,13 @@
 
     <div class="seller-card">
         <span class="seller-card__label">Топ товар</span>
-        <strong class="seller-card__value">Nike Air</strong>
-        <small class="seller-card__hint">найбільше продажів</small>
+        <strong class="seller-card__value">{{ top_product_name }}</strong>
+        <small class="seller-card__hint">
+            {% if top_product_count > 0 %}
+                Продано {{ top_product_count }} шт.
+            {% else %}
+                ще немає продажів
+            {% endif %}
+        </small>
     </div>
 </div>
