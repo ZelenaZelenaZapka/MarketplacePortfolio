@@ -274,15 +274,10 @@ select {
   gap: 12px;
 }
 
-
-
 .history-item:hover {
   background: rgba(255, 255, 255, 0.05);
   border-color: rgba(110, 168, 254, 0.22);
 }
-
-
-
 
 .history-info strong {
   font-size: 14px;
@@ -348,6 +343,7 @@ select {
   color: #73839c;
 }
 
+/* --- CHIPS / FILTERS STYLE FIXED --- */
 .chips {
   display: flex;
   flex-wrap: wrap;
@@ -355,22 +351,45 @@ select {
 }
 
 .chip {
-  padding: 10px 12px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
   border-radius: 999px;
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.03);
   color: var(--text-soft);
   font-size: 13px;
   cursor: pointer;
-  transition: 0.2s ease;
+  transition: all 0.25s ease;
+  user-select: none;
 }
 
-.chip:hover,
-.chip.active {
-  border-color: rgba(110, 168, 254, 0.5);
-  color: #fff;
-  background: rgba(110, 168, 254, 0.12);
+/* Приховуємо чекбокс, але залишаємо його функціональним */
+.chip input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
 }
+
+.chip:hover {
+  border-color: var(--accent);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+}
+
+/* Стан ACTIVE */
+.chip.active {
+  border-color: var(--accent);
+  color: #fff;
+  background: linear-gradient(135deg, rgba(110, 168, 254, 0.25), rgba(139, 92, 246, 0.15));
+  box-shadow: 0 4px 12px rgba(110, 168, 254, 0.15);
+}
+
+/* --- END CHIPS FIXED --- */
 
 .catalog {
   min-width: 0;
@@ -431,8 +450,6 @@ select {
   color: var(--text-soft);
   font-size: 14px;
 }
-
-/* PRODUCTS */
 
 .product-grid {
   display: grid;
@@ -537,8 +554,6 @@ select {
   white-space: nowrap;
 }
 
-/* CART */
-
 .cart {
   padding: 18px;
   position: sticky;
@@ -618,33 +633,26 @@ select {
   .layout {
     grid-template-columns: 250px 1fr;
   }
-
   .cart {
     grid-column: 1 / -1;
     position: static;
   }
-
   .product-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 920px) {
-  .hero-grid,
-  .layout {
+  .hero-grid, .layout {
     grid-template-columns: 1fr;
   }
-
-  .filters,
-  .cart {
+  .filters, .cart {
     position: static;
   }
-
   .toolbar {
     flex-direction: column;
     align-items: stretch;
   }
-
   .toolbar-right {
     justify-content: space-between;
   }
@@ -655,36 +663,26 @@ select {
     flex-wrap: wrap;
     padding: 10px 0;
   }
-
-  .hero-main,
-  .hero-side,
-  .filters,
-  .toolbar,
-  .cart {
+  .hero-main, .hero-side, .filters, .toolbar, .cart {
     padding: 24px;
   }
-
   .product-grid {
     grid-template-columns: 1fr;
   }
-
   .product-image {
     height: 220px;
     flex: 0 0 220px;
   }
-
   .product-bottom {
     flex-direction: row;
     align-items: center;
   }
-
   .add-to-cart {
     min-width: 110px;
     height: 40px;
     padding: 0 14px;
     font-size: 13px;
   }
-
   .nav-actions {
     width: 100%;
     justify-content: flex-end;
@@ -785,4 +783,3 @@ select {
 .cart-note {
   margin-top: 14px;
 }
-

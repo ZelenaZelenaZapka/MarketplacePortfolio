@@ -4,7 +4,7 @@
   <section class="container layout">
 
     <aside class="panel filters" hx-boost="true">
-      <form hx-get="" hx-target="#product-list" hx-push-url="true" hx-trigger="change, input delay:400ms">
+      <form hx-get="{% url 'store' %}" hx-target="#product-list" hx-push-url="true" hx-trigger="change, input delay:400ms" action="{url 'store' %}">
         <h3 class="panel-title">Фільтри</h3>
 
         <div class="filter-group">
@@ -31,22 +31,32 @@
         </div>
 
         <div class="filter-group">
-          <label>Популярні теги</label>
-          <div class="chips">
-            <label class="chip {% if request.GET.new %}active{% endif %}">
-              <input type="checkbox" name="new" value="1" style="display:none" {% if request.GET.new %}checked{% endif %}>
-              Новинки
-            </label>
-            <label class="chip {% if request.GET.sale %}active{% endif %}">
-              <input type="checkbox" name="sale" value="1" style="display:none" {% if request.GET.sale %}checked{% endif %}>
-              Зі знижкою
-            </label>
-            <label class="chip {% if request.GET.top %}active{% endif %}">
-              <input type="checkbox" name="top" value="1" style="display:none" {% if request.GET.top %}checked{% endif %}>
-              Топ
-            </label>
-          </div>
+        <label>Популярні теги</label>
+        <div class="chips">
+          
+          <label class="chip {% if request.GET.new %}active{% endif %}" style="cursor: pointer;">
+            <input type="checkbox" name="new" value="1" 
+                  {% if request.GET.new %}checked{% endif %} 
+                  style="position: absolute; opacity: 0; width: 0; height: 0;">
+            В наявності
+          </label>
+
+          <label class="chip {% if request.GET.sale %}active{% endif %}" style="cursor: pointer;">
+            <input type="checkbox" name="sale" value="1" 
+                  {% if request.GET.sale %}checked{% endif %}
+                  style="position: absolute; opacity: 0; width: 0; height: 0;">
+            Зі знижкою
+          </label>
+
+          <label class="chip {% if request.GET.top %}active{% endif %}" style="cursor: pointer;">
+            <input type="checkbox" name="top" value="1" 
+                  {% if request.GET.top %}checked{% endif %}
+                  style="position: absolute; opacity: 0; width: 0; height: 0;">
+            Топ
+          </label>
+          
         </div>
+      </div>
 
         {% if request.GET %}
           <a href="?" class="btn btn-secondary full-width" style="margin-top: 8px; display: block; text-align: center;">Скинути</a>
@@ -56,7 +66,8 @@
     </aside>
 
     <section class="catalog">
-      <div class="panel toolbar">
+
+      <!-- <div class="panel toolbar">
         <form method="get" action="" style="display: flex; gap: 12px; align-items: center; width: 100%;">
           <div class="searchbar" style="flex: 1;">
             <span>⌕</span>
@@ -70,7 +81,7 @@
           </select>
           <button type="submit" class="btn btn-primary" style="height: 38px;">🔍</button>
         </form>
-      </div>
+      </div> -->
 
       <div class="results-head">
         <div>
@@ -80,7 +91,6 @@
         <span class="pill">Оновлено щойно</span>
       </div>
 
-      <!-- ✅ ДОДАНО id="product-list" -->
       <div id="product-list">
         {% include 'page_of_store/_product_grid.html' %}
       </div>

@@ -6,7 +6,7 @@ from .order import get_cart_data
 
 
 def get_filtered_products(request):
-    qs = Product.objects.select_related('category').filter(is_active=True)
+    qs = Product.objects.select_related('category')
 
     search = request.GET.get('search', '').strip()
     if search:
@@ -25,7 +25,9 @@ def get_filtered_products(request):
         try: qs = qs.filter(price__lte=float(price_max))
         except ValueError: pass
 
-    if request.GET.get('new'): qs = qs.filter(is_new=True)
+    if request.GET.get('new'): 
+        qs = qs.filter(is_active=True)
+
     if request.GET.get('sale'): qs = qs.filter(has_discount=True)
     if request.GET.get('top'): qs = qs.filter(is_top=True)
 
