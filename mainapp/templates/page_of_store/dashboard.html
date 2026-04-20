@@ -1,5 +1,4 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -12,129 +11,66 @@
 
   {% include 'page_of_store/dashboard_func/dashboard_main.html' %}
 
-  <!-- Modal -->
+  <!-- Store Modal -->
   <div class="modal-overlay" id="storeModal">
-  <div class="modal-window">
-    <div class="modal-window__head">
-      <h2>Новий магазин</h2>
-      <button type="button" class="modal-close" id="closeStoreModal">&times;</button>
+    <div class="modal-window">
+      <div class="modal-window__head">
+        <h2>Новий магазин</h2>
+        <button type="button" class="modal-close" id="closeStoreModal">&times;</button>
+      </div>
+      {% include 'page_of_store/dashboard_func/form_store.html' %}
     </div>
-
-    {% include 'page_of_store/dashboard_func/form_store.html' %}
   </div>
-</div>
 
-<div class="modal-overlay" id="itemsModal">
-  <div class="modal-window">
-    <div class="modal-window__head">
-      <h2>Новий товар</h2>
-      <button type="button" class="modal-close" id="closeItemsModal">&times;</button>
+  <!-- Item Modal -->
+  <div class="modal-overlay" id="itemsModal">
+    <div class="modal-window">
+      <div class="modal-window__head">
+        <h2>Новий товар</h2>
+        <button type="button" class="modal-close" id="closeItemsModal">&times;</button>
+      </div>
+      {% include 'page_of_store/dashboard_func/form_item.html' %}
     </div>
-
-    {% include 'page_of_store/dashboard_func/form_item.html' %}
   </div>
-</div>
 
   <script>
-    const storeModal = document.getElementById("storeModal");
-    const openStoreModal = document.getElementById("openStoreModal");
-    const closeStoreModal = document.getElementById("closeStoreModal");
-    const cancelStoreModal = document.getElementById("cancelStoreModal");
+    // Універсальна функція керування модальними вікнами
+    function initModal(overlayId, openId, closeId, cancelId) {
+      const overlay = document.getElementById(overlayId);
+      const openBtn = document.getElementById(openId);
+      const closeBtn = document.getElementById(closeId);
+      const cancelBtn = document.getElementById(cancelId);
 
-    if (openStoreModal && storeModal) {
-      openStoreModal.addEventListener("click", () => {
-        storeModal.classList.add("active");
-      });
+      function open() { overlay.classList.add('active'); }
+      function close() { overlay.classList.remove('active'); }
+
+      if (openBtn) openBtn.addEventListener('click', open);
+      if (closeBtn) closeBtn.addEventListener('click', close);
+      if (cancelBtn) cancelBtn.addEventListener('click', close);
+      if (overlay) overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
     }
 
-    if (closeStoreModal && storeModal) {
-      closeStoreModal.addEventListener("click", () => {
-        storeModal.classList.remove("active");
-      });
-    }
+    // Ініціалізація стандартних модалок
+    initModal('storeModal', 'openStoreModal', 'closeStoreModal', 'cancelStoreModal');
+    initModal('itemsModal', 'openItemsModal', 'closeItemsModal', 'cancelItemsModal');
 
-    if (cancelStoreModal && storeModal) {
-      cancelStoreModal.addEventListener("click", () => {
-        storeModal.classList.remove("active");
-      });
-    }
-
-    if (storeModal) {
-      storeModal.addEventListener("click", (event) => {
-        if (event.target === storeModal) {
-          storeModal.classList.remove("active");
-        }
-      });
-    }
-
-
-    const itemsModal = document.getElementById("itemsModal");
-    const openItemsModal = document.getElementById("openItemsModal");
-    const closeItemsModal = document.getElementById("closeItemsModal");
-    const cancelItemsModal = document.getElementById("cancelItemsModal");
-
-    if (openItemsModal && itemsModal) {
-      openItemsModal.addEventListener("click", () => {
-        itemsModal.classList.add("active");
-      });
-    }
-
-    if (closeItemsModal && itemsModal) {
-      closeItemsModal.addEventListener("click", () => {
-        itemsModal.classList.remove("active");
-      });
-    }
-
-    if (cancelItemsModal && itemsModal) {
-      cancelItemsModal.addEventListener("click", () => {
-        itemsModal.classList.remove("active");
-      });
-    }
-
-    if (itemsModal) {
-      itemsModal.addEventListener("click", (event) => {
-        if (event.target === itemsModal) {
-          itemsModal.classList.remove("active");
-        }
-      });
-    }
-
-
-    const editOpenButtons = document.querySelectorAll('[id^="openEditItemModal-"]');
-
-    editOpenButtons.forEach((button) => {
-      const productId = button.id.replace("openEditItemModal-", "");
-      const modal = document.getElementById(`editItemModal-${productId}`);
-      const closeButton = document.getElementById(`closeEditItemModal-${productId}`);
-      const cancelButton = document.getElementById(`cancelEditItemModal-${productId}`);
-
-      if (button && modal) {
-        button.addEventListener("click", () => {
-          modal.classList.add("active");
-        });
-      }
-
-      if (closeButton && modal) {
-        closeButton.addEventListener("click", () => {
-          modal.classList.remove("active");
-        });
-      }
-
-      if (cancelButton && modal) {
-        cancelButton.addEventListener("click", () => {
-          modal.classList.remove("active");
-        });
-      }
-
-      if (modal) {
-        modal.addEventListener("click", (event) => {
-          if (event.target === modal) {
-            modal.classList.remove("active");
-          }
-        });
-      }
+    // Ініціалізація модалок редагування товарів (динамічні ID)
+    document.querySelectorAll('.seller-product-actions button[id^="openEditItemModal-"]').forEach(btn => {
+      const productId = btn.id.replace('openEditItemModal-', '');
+      initModal(
+        `editItemModal-${productId}`,
+        btn.id,
+        `closeEditItemModal-${productId}`,
+        `cancelEditItemModal-${productId}`
+      );
     });
+
+    // 🟢 Авто-відкриття модалки редагування, якщо Django повернув помилки валідації
+    const errorProductId = "{{ edit_form_errors_product_id }}";
+    if (errorProductId) {
+      const overlay = document.getElementById(`editItemModal-${errorProductId}`);
+      if (overlay) overlay.classList.add('active');
+    }
   </script>
 </body>
 </html>
-

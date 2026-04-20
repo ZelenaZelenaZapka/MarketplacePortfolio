@@ -1,44 +1,32 @@
-<form method="post" class="store-form" enctype="multipart/form-data" action="{% url 'item_dashboard' %}">
+{% load static %}
+<form method="post" class="store-form" enctype="multipart/form-data" action="{% url 'dashboard' %}">
     {% csrf_token %}
+    <input type="hidden" name="action" value="create_product">
     <input type="hidden" name="store_id" value="{{ selected_store.id }}">
 
     <div class="store-form__group">
-        <label for="store-name">Назва </label>
-        <input
-        id="store-name"
-        type="text"
-        name="name"
-        placeholder="Наприклад: Гумова Качечка"
-        required
-        >
+        <label for="item-name">Назва товару</label>
+        <input id="item-name" type="text" name="name" placeholder="Наприклад: Гумова Качечка" required>
     </div>
 
     <div class="store-form__group">
-        <label for="store-description">Опис товару</label>
-        <textarea
-        id="store-description"
-        name="description"
-        rows="4"
-        placeholder="Коротко опишіть ваш товар"></textarea>
+        <label for="item-description">Опис товару</label>
+        <textarea id="item-description" name="description" rows="4" placeholder="Коротко опишіть ваш товар"></textarea>
     </div>
 
     <div class="store-form__group">
-        <label for="store-description">Ціна в грн</label>
-        <input 
-        type="number" 
-        name="price" 
-        step="0.01">
+        <label for="item-price">Ціна в грн</label>
+        <input id="item-price" type="number" name="price" step="0.01" required>
     </div>
 
     <div class="store-form__group">
-        <input 
-        type="file" 
-        name="image">
+        <label for="item-image">Зображення</label>
+        <input id="item-image" type="file" name="image">
     </div>
 
     <div class="store-form__group">
-        <label for="product-category">Категорія</label>
-        <select id="product-category" name="category">
+        <label for="item-category">Категорія</label>
+        <select id="item-category" name="category">
             <option value="">Оберіть категорію</option>
             {% for category in product_form.fields.category.queryset %}
                 <option value="{{ category.id }}">{{ category.name }}</option>

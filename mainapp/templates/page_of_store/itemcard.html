@@ -13,6 +13,11 @@
         </div>
 
         <div class="filter-group">
+          <label>Search store</label>
+          <input type="text" name="search_store" placeholder="Наприклад, pandora" value="{{ request.GET.search_store }}">
+        </div>
+
+        <div class="filter-group">
           <label>Категорія</label>
           <select name="category">
             <option value="">Всі категорії</option>
@@ -48,12 +53,6 @@
               Зі знижкою
             </label>
 
-            <label class="chip {% if request.GET.top %}active{% endif %}" style="cursor: pointer;">
-              <input type="checkbox" name="top" value="1" 
-                    {% if request.GET.top %}checked{% endif %}
-                    style="position: absolute; opacity: 0; width: 0; height: 0;">
-              Топ
-            </label>
             </div>
         </div>
 
@@ -65,22 +64,6 @@
     </aside>
 
     <section class="catalog">
-
-      <!-- <div class="panel toolbar">
-        <form method="get" action="" style="display: flex; gap: 12px; align-items: center; width: 100%;">
-          <div class="searchbar" style="flex: 1;">
-            <span>⌕</span>
-            <input type="text" name="search" placeholder="Шукати товари..." value="{{ request.GET.search }}">
-          </div>
-          <select name="sort">
-            <option value="">За замовчуванням</option>
-            <option value="price_asc" {% if request.GET.sort == 'price_asc' %}selected{% endif %}>Від дешевих</option>
-            <option value="price_desc" {% if request.GET.sort == 'price_desc' %}selected{% endif %}>Від дорогих</option>
-            <option value="newest" {% if request.GET.sort == 'newest' %}selected{% endif %}>Нові</option>
-          </select>
-          <button type="submit" class="btn btn-primary" style="height: 38px;">🔍</button>
-        </form>
-      </div> -->
 
       <div class="results-head">
         <div>

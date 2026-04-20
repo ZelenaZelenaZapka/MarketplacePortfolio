@@ -1,25 +1,16 @@
-<form method="post" class="store-form">
+{% load static %}
+<form method="post" class="store-form" action="{% url 'dashboard' %}">
     {% csrf_token %}
+    <input type="hidden" name="action" value="create_store">
 
     <div class="store-form__group">
         <label for="store-name">Назва магазину</label>
-        <input
-        id="store-name"
-        type="text"
-        name="name"
-        placeholder="Наприклад: Tech World"
-        required
-        >
+        <input id="store-name" type="text" name="name" placeholder="Наприклад: Tech World" required>
     </div>
 
     <div class="store-form__group">
         <label for="store-description">Опис магазину</label>
-        <textarea
-        id="store-description"
-        name="description"
-        rows="4"
-        placeholder="Коротко опишіть ваш магазин"
-        ></textarea>
+        <textarea id="store-description" name="description" rows="4" placeholder="Коротко опишіть ваш магазин"></textarea>
     </div>
 
     <div class="store-form__actions">

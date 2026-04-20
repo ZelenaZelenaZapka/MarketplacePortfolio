@@ -24,7 +24,6 @@
                             <img src="{% static 'img/product-placeholder.png' %}" alt="Product">
                         {% endif %}
                     </div>
-
                     <div class="seller-product-info">
                         <strong>{{ product.name }}</strong>
                         <small>{{ product.description }}</small>
@@ -34,14 +33,15 @@
                 <div class="seller-product-price">{{ product.price }} ₴</div>
 
                 <div class="seller-product-status">
-                    <span class="status-badge status-instock">
+                    <span class="status-badge {% if product.is_active %}status-instock{% else %}status-outofstock{% endif %}">
                         {% if product.is_active %}В наявності{% else %}Немає в наявності{% endif %}
                     </span>
                 </div>
 
                 <div class="seller-product-actions">
-                    <form method="post" action="{% url 'delete_product' product.id %}" style="display:inline;">
+                    <form method="post" action="{% url 'dashboard_product' product_id=product.id %}" style="display:inline;">
                         {% csrf_token %}
+                        <input type="hidden" name="action" value="delete_product">
                         <button class="btn btn-danger btn-sm" type="submit">Видалити</button>
                     </form>
 
@@ -51,6 +51,7 @@
                 </div>
             </div>
 
+            <!-- Modal -->
             <div class="modal-overlay" id="editItemModal-{{ product.id }}">
                 <div class="modal-window">
                     <div class="modal-window__head">
@@ -58,47 +59,41 @@
                         <button type="button" class="modal-close" id="closeEditItemModal-{{ product.id }}">&times;</button>
                     </div>
 
-                    <form method="post" class="store-form" enctype="multipart/form-data" action="{% url 'edit_product' product.id %}">
+                    <form method="post" class="store-form" enctype="multipart/form-data" action="{% url 'dashboard_product' product_id=product.id %}">
                         {% csrf_token %}
+                        <input type="hidden" name="action" value="edit_product">
+
+                        <!-- Відображення помилок валідації -->
+                        {% if edit_form and edit_form_errors_product_id == product.id %}
+                            <div class="form-errors" style="color: #e74c3c; margin-bottom: 10px;">
+                                {% if edit_form.non_field_errors %}{{ edit_form.non_field_errors }}{% endif %}
+                                {% for field in edit_form %}
+                                    {% for error in field.errors %}
+                                        <p>{{ field.label }}: {{ error }}</p>
+                                    {% endfor %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
 
                         <div class="store-form__group">
                             <label for="edit-name-{{ product.id }}">Назва товару</label>
-                            <input
-                                id="edit-name-{{ product.id }}"
-                                type="text"
-                                name="name"
-                                value="{{ product.name }}"
-                                required>
+                            <input id="edit-name-{{ product.id }}" type="text" name="name" value="{{ edit_form.name.value|default:product.name }}" required>
                         </div>
 
                         <div class="store-form__group">
                             <label for="edit-description-{{ product.id }}">Опис товару</label>
-                            <textarea
-                                id="edit-description-{{ product.id }}"
-                                name="description"
-                                rows="4"
-                            >{{ product.description }}</textarea>
+                            <textarea id="edit-description-{{ product.id }}" name="description" rows="4">{{ edit_form.description.value|default:product.description }}</textarea>
                         </div>
 
                         <div class="store-form__group">
                             <label for="edit-price-{{ product.id }}">Ціна в грн</label>
-                            <input
-                                id="edit-price-{{ product.id }}"
-                                type="number"
-                                name="price"
-                                step="0.01"
-                                value="{{ product.price }}"
-                                required
-                            >
+                            <input id="edit-price-{{ product.id }}" type="number" name="price" step="0.01" value="{{ edit_form.price.value|default:product.price }}" required>
                         </div>
 
                         <div class="store-form__group">
                             <label for="edit-image-{{ product.id }}">Нове зображення</label>
-                            <input
-                                id="edit-image-{{ product.id }}"
-                                type="file"
-                                name="image"
-                            >
+                            <input id="edit-image-{{ product.id }}" type="file" name="image">
+                            {% if product.image %}<small style="display:block; margin-top:4px;">Поточне: {{ product.image.name }}</small>{% endif %}
                         </div>
 
                         <div class="store-form__group">
@@ -106,7 +101,7 @@
                             <select id="edit-category-{{ product.id }}" name="category">
                                 <option value="">Оберіть категорію</option>
                                 {% for category in product_form.fields.category.queryset %}
-                                    <option value="{{ category.id }}" {% if product.category and product.category.id == category.id %}selected{% endif %}>
+                                    <option value="{{ category.id }}" {% if edit_form.category.value == category.id or product.category.id == category.id %}selected{% endif %}>
                                         {{ category.name }}
                                     </option>
                                 {% endfor %}
@@ -116,8 +111,8 @@
                         <div class="store-form__group">
                             <label for="edit-status-{{ product.id }}">Статус</label>
                             <select id="edit-status-{{ product.id }}" name="is_active">
-                                <option value="True" {% if product.is_active %}selected{% endif %}>В наявності</option>
-                                <option value="False" {% if not product.is_active %}selected{% endif %}>Немає в наявності</option>
+                                <option value="True" {% if edit_form.is_active.value == True or product.is_active %}selected{% endif %}>В наявності</option>
+                                <option value="False" {% if edit_form.is_active.value == False or not product.is_active %}selected{% endif %}>Немає в наявності</option>
                             </select>
                         </div>
 
@@ -129,8 +124,8 @@
                 </div>
             </div>
 
-            {% empty %}
-                <p>Товарів поки немає.</p>
+        {% empty %}
+            <p>Товарів поки немає.</p>
         {% endfor %}
     </div>
 </section>

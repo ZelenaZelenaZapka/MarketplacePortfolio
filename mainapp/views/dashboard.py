@@ -1,171 +1,208 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.text import slugify
+from django.db.models import Sum, F
 
-from ..models import Seller, Store, Product
+from ..models import Seller, Store, Product, Order, OrderItem
 from ..forms import ProductForm
 
-@login_required
-def dashboard(request):
-    try:
-        seller = Seller.objects.get(user=request.user)
-    except Seller.DoesNotExist:
-        return redirect("/store")
+# ==============================================================================
+# 🔍 ДОПОМІЖНІ ФУНКЦІЇ (Бізнес-логіка)
+# ==============================================================================
 
-    if request.method == "POST":
-        name = request.POST.get("name", "").strip()
-        description = request.POST.get("description", "").strip()
+def _get_active_seller(request):
+    """Безпечно отримує продавця або повертає None."""
+    return Seller.objects.filter(user=request.user).first()
 
-        if name:
-            base_slug = slugify(name)
-            slug = base_slug
-            counter = 1
 
-            while Store.objects.filter(slug=slug).exists():
-                slug = f"{base_slug}-{counter}"
-                counter += 1
-
-            Store.objects.create(
-                seller_by=seller,
-                name=name,
-                description=description,
-                slug=slug,
-            )
-
-        return redirect("dashboard")
-
+def _get_selected_store(seller, store_id=None):
+    """Визначає поточний магазин для відображення."""
     stores = seller.stores.all()
+    return stores.filter(id=store_id).first() if store_id else stores.first()
 
-    store_id = request.GET.get("store")
-    selected_store = None
 
-    if store_id:
-        selected_store = stores.filter(id=store_id).first()
+def _filter_products(products_qs, request):
+    """Застосовує фільтри з GET-параметрів до QuerySet товарів."""
+    qs = products_qs
+    
+    # 1. Пошук по назві
+    search = request.GET.get('product_name', '').strip()
+    if search:
+        qs = qs.filter(name__icontains=search)
 
-    if not selected_store:
-        selected_store = stores.first()
+    # 2. Ціна (від / до)
+    price_min = request.GET.get('price_from')
+    price_max = request.GET.get('price_to')
+    try:
+        if price_min:
+            qs = qs.filter(price__gte=float(price_min))
+        if price_max:
+            qs = qs.filter(price__lte=float(price_max))
+    except ValueError:
+        pass
 
+    # 3. Сортування
+    sort = request.GET.get('price_sort')
+    if sort == 'asc':
+        qs = qs.order_by('price')
+    elif sort == 'desc':
+        qs = qs.order_by('-price')
+    else:
+        qs = qs.order_by('-created_at')
+
+    # 4. Тільки в наявності
+    if request.GET.get('in_stock'):
+        qs = qs.filter(is_active=True)
+
+    return qs
+
+
+def _build_dashboard_context(seller, store_id=None, extra_context=None, request=None):
+    """Збирає всі дані для рендерингу шаблону дашборду."""
+    stores = seller.stores.all()
+    selected_store = _get_selected_store(seller, store_id)
+
+    # Базовий набір продуктів
     if selected_store:
         products = selected_store.products.all()
+        # ЗАСТОСОВУЄМО ФІЛЬТРИ (якщо є request)
+        if request:
+            products = _filter_products(products, request)
     else:
         products = Product.objects.none()
 
-    product_form = ProductForm()
+    # Статистика
+    orders_count = 0
+    revenue = 0.0
+    if selected_store:
+        orders_count = Order.objects.filter(
+            items__product__store=selected_store
+        ).distinct().count()
+        
+        revenue_data = OrderItem.objects.filter(
+            product__store=selected_store
+        ).aggregate(total=Sum(F('price') * F('quantity')))
+        revenue = revenue_data['total'] or 0.0
 
-    return render(
-        request,
-        "page_of_store/dashboard.html",
-        {
-            "stores": stores,
-            "selected_store": selected_store,
-            "products": products,
-            "product_form": product_form,
-        },
-    )
+    context = {
+        "stores": stores,
+        "selected_store": selected_store,
+        "products": products,
+        "product_form": ProductForm(),
+        "orders_count": orders_count,
+        "revenue": revenue,
+    }
+    if extra_context:
+        context.update(extra_context)
+    return context
 
 
-@login_required
-def item(request):
-    try:
-        seller = Seller.objects.get(user=request.user)
-    except Seller.DoesNotExist:
-        return redirect("/store")
+def _generate_unique_slug(name):
+    """Генерує унікальний slug для магазину з лічильником."""
+    base_slug = slugify(name)
+    slug = base_slug
+    counter = 1
+    while Store.objects.filter(slug=slug).exists():
+        slug = f"{base_slug}-{counter}"
+        counter += 1
+    return slug
 
-    if request.method != "POST":
-        return redirect("dashboard")
 
-    product_form = ProductForm(request.POST, request.FILES)
+# ==============================================================================
+# ⚡ ОБРОБНИКИ ДІЙ (Action Handlers)
+# ==============================================================================
+
+def _handle_create_store(request, seller):
+    """Створення магазину."""
+    name = request.POST.get("name", "").strip()
+    description = request.POST.get("description", "").strip()
+    if name:
+        Store.objects.create(
+            seller_by=seller, name=name, description=description, 
+            slug=_generate_unique_slug(name)
+        )
+    return redirect("dashboard")
+
+
+def _handle_create_product(request, seller):
+    """Додавання товару в магазин."""
     store_id = request.POST.get("store_id")
-
-    selected_store = None
-    if store_id:
-        selected_store = seller.stores.filter(id=store_id).first()
-
+    selected_store = seller.stores.filter(id=store_id).first()
     if not selected_store:
         return redirect("dashboard")
 
+    product_form = ProductForm(request.POST, request.FILES)
     if product_form.is_valid():
         product = product_form.save(commit=False)
         product.store = selected_store
         product.save()
         return redirect(f"/dashboard?store={selected_store.id}")
 
-    stores = seller.stores.all()
-    products = selected_store.products.all()
+    return render(request, "page_of_store/dashboard.html", 
+                  _build_dashboard_context(seller, store_id, 
+                                           {"product_form": product_form}, 
+                                           request=request))
 
-    return render(
-        request,
-        "page_of_store/dashboard.html",
-        {
-            "stores": stores,
-            "selected_store": selected_store,
-            "products": products,
-            "product_form": product_form,
-        },
-    )
 
-@login_required
-def delete_product(request, product_id):
-    try:
-        seller = Seller.objects.get(user=request.user)
-    except Seller.DoesNotExist:
-        return redirect("/store")
-
-    if request.method != "POST":
-        return redirect("dashboard")
-
+def _handle_delete_product(request, seller, product_id):
+    """Видалення товару."""
     product = Product.objects.filter(
-        id=product_id,
-        store__seller_by=seller
+        id=product_id, store__seller_by=seller
     ).select_related("store").first()
-
-    if not product:
+    if not product: 
         return redirect("dashboard")
-
-    store_id = product.store.id
     product.delete()
+    return redirect(f"/dashboard?store={product.store.id}")
 
-    return redirect(f"/dashboard?store={store_id}")
 
-@login_required
-def edit_product(request, product_id):
-    try:
-        seller = Seller.objects.get(user=request.user)
-    except Seller.DoesNotExist:
-        return redirect("/store")
-
+def _handle_update_product(request, seller, product_id):
+    """Оновлення товару."""
     product = Product.objects.filter(
-        id=product_id,
-        store__seller_by=seller
+        id=product_id, store__seller_by=seller
     ).select_related("store").first()
-
-    if not product:
+    if not product: 
         return redirect("dashboard")
-
-    if request.method != "POST":
-        return redirect(f"/dashboard?store={product.store.id}")
 
     product_form = ProductForm(request.POST, request.FILES, instance=product)
-
     if product_form.is_valid():
-        updated_product = product_form.save(commit=False)
-        updated_product.store = product.store
-        updated_product.save()
+        updated = product_form.save(commit=False)
+        updated.store = product.store
+        updated.save()
         return redirect(f"/dashboard?store={product.store.id}")
 
-    stores = seller.stores.all()
-    selected_store = product.store
-    products = selected_store.products.all()
+    return render(request, "page_of_store/dashboard.html",
+                  _build_dashboard_context(seller, product.store.id, {
+                      "product_form": ProductForm(),
+                      "edit_form": product_form,
+                      "edit_form_errors_product_id": product.id
+                  }, request=request))
 
-    return render(
-        request,
-        "page_of_store/dashboard.html",
-        {
-            "stores": stores,
-            "selected_store": selected_store,
-            "products": products,
-            "product_form": ProductForm(),
-            "edit_form_errors_product_id": product.id,
-            "edit_form": product_form,
-        },
-    )
+
+# ==============================================================================
+# 🖥 ЄДИНИЙ VIEW / КОНТРОЛЕР
+# ==============================================================================
+
+@login_required
+def seller_dashboard(request, product_id=None):
+    seller = _get_active_seller(request)
+    if not seller:
+        return redirect("/store")
+
+    # 🟢 POST-маршрутизація (дії)
+    if request.method == "POST":
+        action = request.POST.get("action")
+        if action == "create_store":
+            return _handle_create_store(request, seller)
+        if action == "create_product":
+            return _handle_create_product(request, seller)
+        if action == "delete_product":
+            return _handle_delete_product(request, seller, product_id)
+        if action == "edit_product":
+            return _handle_update_product(request, seller, product_id)
+        return redirect("dashboard")
+
+    # 🔵 GET-запит (перегляд + фільтри)
+    store_id = request.GET.get("store")
+    return render(request, "page_of_store/dashboard.html", 
+                  _build_dashboard_context(seller, store_id, request=request))
+
