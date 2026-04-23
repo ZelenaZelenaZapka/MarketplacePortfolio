@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import auth, store, dashboard, order, pay
+from .views import auth, store, dashboard, order, pay, card_render
 
 urlpatterns = [
     path("store", store.store_page, name="store"),
@@ -14,6 +14,7 @@ urlpatterns = [
     path("pay/", pay.pay_render, name="pay_render"),
     path("cart/qty/<int:product_id>/", order.change_quantity, name="change_quantity"),
     path("thanks/<int:order_id>/", pay.thanks_page, name="thanks"),
+    path("item_page", card_render.cart_product_render, name="card_product"),
     path("", store.logout_view, name="logout"),
 ]
 

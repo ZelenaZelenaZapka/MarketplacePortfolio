@@ -1,0 +1,82 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MarketHub | AirSound Pro</title>
+    <link rel="stylesheet" href="{% static 'css/card_product.css' %}">
+</head>
+<body>
+
+    <header>
+        <a href="#" class="logo">
+            <div class="logo-icon">M</div>
+            MarketHub
+        </a>
+    
+        <div class="nav">
+            <a href="#" class="btn-login">Увійти</a>
+            <a href="{% url 'store' %}" class="btn-login">Назад</a>        
+        </div>
+    
+    </header>
+
+    <main class="product-container">
+        <div class="product-gallery">
+            <div class="main-image">
+                <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="1.5">
+                    <path d="M3 18V6c0-1.1.9-2 2-2h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                </svg>
+            </div>
+        </div>
+
+        <div class="product-info-card">
+            <span class="badge">В наявності</span>
+            <h1>AirSound Pro</h1>
+            <div class="seller-info">Магазин: <strong>AudioSpace</strong> • 240+ успішних угод</div>
+            
+            <div class="price-tag">
+                2 899 ₴
+                <span>/ шт.</span>
+            </div>
+
+            <div class="specs-grid">
+                <div class="spec-item">
+                    <span class="spec-label">Виробник</span>
+                    <span class="spec-value">Premium Audio Group</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-label">Тип підключення</span>
+                    <span class="spec-value">Bluetooth 5.3</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-label">Час роботи</span>
+                    <span class="spec-value">до 30 годин</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-label">Колір</span>
+                    <span class="spec-value">Space Gray</span>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="btn-buy">Купити зараз</button>
+                <button class="btn-cart">В кошик</button>
+            </div>
+
+            <div class="description">
+                <h3>Про товар</h3>
+                <p>
+                    AirSound Pro — це нове покоління бездротових навушників з активним шумопоглинанням. 
+                    Завдяки сучасному чіпу та оптимізованим драйверам, ви отримуєте кристально чистий звук 
+                    та глибокі баси. Ідеально підходить як для роботи, так і для занять спортом.
+                </p>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>
