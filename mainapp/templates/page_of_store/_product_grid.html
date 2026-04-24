@@ -1,43 +1,48 @@
 {% load static %}
 <div class="product-grid" id="product-list">
   {% for product in products %}
-    <!-- Загортаємо картку в посилання. Клас product-card залишено на <a>, щоб CSS працював без змін -->
-    <a href="{% url 'card_product' item_id=product.id %}" class="product-card" style="display: block; text-decoration: none; color: inherit;">
-      <div class="product-image">
-        <div class="product-image-frame">
-          {% if product.image %}
-            <img src="{{ product.image.url }}" alt="{{ product.name }}">
-          {% else %}
-            <img src="{% static 'img/product-placeholder.png' %}" alt="Product">
-          {% endif %}
-        </div>
-      </div>
-      <div class="product-body">
-        <div class="product-meta">
-          <span>{{ product.store.name|default:"-" }}</span>
-          <span>{{ product.category.name|default:"Без категорії" }}</span>
-        </div>
-        <h3 class="product-title">{{ product.name }}</h3>
-        <div class="product-bottom">
-          <div class="price">
-            <strong>{{ product.price }} ₴</strong>
+    
+    <!-- 1. Єдиний контейнер картки. Саме на нього зазвичай "вішається" grid/flex -->
+    <div class="product-card">
+      
+      <!-- 2. Посилання огортає ВСЮ візуальну частину (картинка + інфо + ціна) -->
+      <a href="{% url 'card_product' item_id=product.id %}" class="card-link">
+        
+        <div class="product-image">
+          <div class="product-image-frame">
+            {% if product.image %}
+              <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            {% else %}
+              <img src="{% static 'img/product-placeholder.png' %}" alt="Product">
+            {% endif %}
           </div>
-          
-          {% if not is_seller %}
-            <form action="{% url 'add_to_cart' product.id %}" method="post" class="add-to-cart-form">
-              {% csrf_token %}
-              <!-- event.stopPropagation() блокує перехід за посиланням при кліку на кнопку -->
-              <button 
-                type="button" 
-                class="btn btn-primary add-to-cart" 
-                onclick="event.stopPropagation(); window.addToCart(this)"
-              >
-                В кошик
-              </button>
-            </form>
-          {% endif %}
         </div>
-      </div>
-    </a>
+        
+        <div class="product-body">
+          <div class="product-meta">
+            <span>{{ product.store.name|default:"-" }}</span>
+            <span>{{ product.category.name|default:"Без категорії" }}</span>
+          </div>
+          <h3 class="product-title">{{ product.name }}</h3>
+          <div class="product-bottom">
+            <div class="price">
+              <strong>{{ product.price }} ₴</strong>
+            </div>
+          </div>
+        </div>
+
+      </a>
+
+      <!-- 3. Форма винесена ЗОВНІ <a>, щоб уникнути конфлікту подій -->
+      {% if not is_seller %}
+        <form action="{% url 'add_to_cart' product.id %}" method="post" class="add-to-cart-form">
+          {% csrf_token %}
+          <!-- type="button" запобігає відправці форми при натисканні, якщо обробка йде через JS -->
+          <button type="button" class="btn btn-primary add-to-cart" onclick="window.addToCart(this)">
+            В кошик
+          </button>
+        </form>
+      {% endif %}
+    </div>
   {% endfor %}
 </div>
