@@ -2,7 +2,7 @@
 <div class="product-grid" id="product-list">
   {% for product in products %}
     <!-- Загортаємо картку в посилання. Клас product-card залишено на <a>, щоб CSS працював без змін -->
-    <a href="{% url 'card_product' %}" class="product-card" style="display: block; text-decoration: none; color: inherit;">
+    <a href="{% url 'card_product' item_id=product.id %}" class="product-card" style="display: block; text-decoration: none; color: inherit;">
       <div class="product-image">
         <div class="product-image-frame">
           {% if product.image %}
