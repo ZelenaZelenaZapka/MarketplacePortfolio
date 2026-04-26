@@ -1,0 +1,61 @@
+{% load static %}
+
+<main class="product-container">
+    <div class="product-gallery">
+        <div class="main-image">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            {% else %}
+                <img src="{% static 'img/product-placeholder.png' %}" alt="Product">
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="product-info-card">
+        <span class="badge">
+            {% if product.is_active %}
+                В наявності
+            {% else %}
+                Немає зараз
+            {% endif %}
+        </span>
+        <h1>{{ product.name }}</h1>
+        <div class="seller-info">Магазин: <strong>{{ product.store.name }}</strong> • {{ sold_count }} успішних угод</div>
+        
+        <div class="price-tag">
+            {{ product.price }} ₴
+            <span>/ шт.</span>
+        </div>
+
+        <div class="specs-grid">
+            <div class="spec-item">
+                <span class="spec-label">Виробник</span>
+                <span class="spec-value">Premium Audio Group</span>
+            </div>
+            <div class="spec-item">
+                <span class="spec-label">Тип підключення</span>
+                <span class="spec-value">Bluetooth 5.3</span>
+            </div>
+            <div class="spec-item">
+                <span class="spec-label">Час роботи</span>
+                <span class="spec-value">до 30 годин</span>
+            </div>
+            <div class="spec-item">
+                <span class="spec-label">Колір</span>
+                <span class="spec-value">Space Gray</span>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="btn-buy">Купити зараз</button>
+            <button class="btn-cart">В кошик</button>
+        </div>
+
+        <div class="description">
+            <h3>Про товар</h3>
+            <p>
+                {{ product.description }}
+            </p>
+        </div>
+    </div>
+</main>

@@ -539,19 +539,37 @@ select {
   font-size: 10px;
 }
 
+/* === ВИПРАВЛЕННЯ КНОПКИ "В КОШИК" === */
+.add-to-cart-form {
+  display: flex;
+  justify-content: center;
+  padding: 14px 16px 16px; /* Відступи знизу та по боках */
+  margin-top: auto; /* Штовхає форму до самого низу картки */
+}
+
 .add-to-cart {
-  flex-shrink: 0;
-  min-width: 110px;
-  height: 44px;
-  padding: 0 16px;
+  width: 100%; /* Кнопка розтягується на всю ширину */
+  max-width: 260px; /* Але не стає занадто широкою на великих екранах */
+  height: 46px;
   border-radius: 12px;
   font-size: 14px;
   font-weight: 600;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   white-space: nowrap;
+}
+
+/* Якщо хочеш, щоб кнопка на мобільних була на всю ширину */
+@media (max-width: 640px) {
+  .add-to-cart {
+    max-width: 100%;
+    height: 44px;
+  }
+  .add-to-cart-form {
+    padding: 12px 14px 14px;
+  }
 }
 
 .cart {
