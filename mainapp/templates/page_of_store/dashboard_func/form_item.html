@@ -1,5 +1,5 @@
 {% load static %}
-<form method="post" class="store-form" enctype="multipart/form-data" action="{% url 'dashboard' %}">
+<form method="post" class="store-form js-attributes-editor" enctype="multipart/form-data" action="{% url 'dashboard' %}">
     {% csrf_token %}
     <input type="hidden" name="action" value="create_product">
     <input type="hidden" name="store_id" value="{{ selected_store.id }}">
@@ -32,6 +32,21 @@
                 <option value="{{ category.id }}">{{ category.name }}</option>
             {% endfor %}
         </select>
+    </div>
+
+    <div class="store-form__group">
+        <label>Характеристики товару (specs-grid)</label>
+        <div class="attributes-list" data-attributes-list>
+            <div class="attribute-row">
+                <input type="text" data-attr-name placeholder="Назва (наприклад: Колір)">
+                <input type="text" data-attr-value placeholder="Значення (наприклад: Чорний)">
+                <button type="button" class="btn btn-light" data-remove-attr>−</button>
+            </div>
+        </div>
+        <div class="store-form__actions" style="margin-top: 8px;">
+            <button type="button" class="btn btn-light" data-add-attr>+ Додати характеристику</button>
+        </div>
+        <input type="hidden" name="attributes_json" data-attributes-json value="{}">
     </div>
 
     <div class="store-form__actions">

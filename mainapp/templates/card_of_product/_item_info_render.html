@@ -28,22 +28,17 @@
         </div>
 
         <div class="specs-grid">
-            <div class="spec-item">
-                <span class="spec-label">Виробник</span>
-                <span class="spec-value">Premium Audio Group</span>
-            </div>
-            <div class="spec-item">
-                <span class="spec-label">Тип підключення</span>
-                <span class="spec-value">Bluetooth 5.3</span>
-            </div>
-            <div class="spec-item">
-                <span class="spec-label">Час роботи</span>
-                <span class="spec-value">до 30 годин</span>
-            </div>
-            <div class="spec-item">
-                <span class="spec-label">Колір</span>
-                <span class="spec-value">Space Gray</span>
-            </div>
+            {% for spec_name, spec_value in specs %}
+                <div class="spec-item">
+                    <span class="spec-label">{{ spec_name }}</span>
+                    <span class="spec-value">{{ spec_value }}</span>
+                </div>
+            {% empty %}
+                <div class="spec-item">
+                    <span class="spec-label">Характеристики</span>
+                    <span class="spec-value">Ще не додано</span>
+                </div>
+            {% endfor %}
         </div>
 
         <div class="actions">

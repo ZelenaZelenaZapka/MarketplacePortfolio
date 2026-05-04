@@ -53,13 +53,14 @@
 
             <!-- Modal -->
             <div class="modal-overlay" id="editItemModal-{{ product.id }}">
-                <div class="modal-window">
+                <div class="modal-window modal-window--large">
                     <div class="modal-window__head">
                         <h2>Змінити товар</h2>
                         <button type="button" class="modal-close" id="closeEditItemModal-{{ product.id }}">&times;</button>
                     </div>
 
-                    <form method="post" class="store-form" enctype="multipart/form-data" action="{% url 'dashboard_product' product_id=product.id %}">
+                    <div class="modal-body">
+                    <form method="post" class="store-form js-attributes-editor" enctype="multipart/form-data" action="{% url 'dashboard_product' product_id=product.id %}">
                         {% csrf_token %}
                         <input type="hidden" name="action" value="edit_product">
 
@@ -116,11 +117,35 @@
                             </select>
                         </div>
 
+                        <div class="store-form__group">
+                            <label>Характеристики товару (specs-grid)</label>
+                            <div class="attributes-list" data-attributes-list>
+                                {% for attr_name, attr_value in product.attributes.items %}
+                                    <div class="attribute-row">
+                                        <input type="text" data-attr-name value="{{ attr_name }}" placeholder="Назва">
+                                        <input type="text" data-attr-value value="{{ attr_value }}" placeholder="Значення">
+                                        <button type="button" class="btn btn-light" data-remove-attr>−</button>
+                                    </div>
+                                {% empty %}
+                                    <div class="attribute-row">
+                                        <input type="text" data-attr-name placeholder="Назва (наприклад: Колір)">
+                                        <input type="text" data-attr-value placeholder="Значення (наприклад: Чорний)">
+                                        <button type="button" class="btn btn-light" data-remove-attr>−</button>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="store-form__actions" style="margin-top: 8px;">
+                                <button type="button" class="btn btn-light" data-add-attr>+ Додати характеристику</button>
+                            </div>
+                            <input type="hidden" name="attributes_json" data-attributes-json value="{}">
+                        </div>
+
                         <div class="store-form__actions">
                             <button type="button" class="btn btn-light" id="cancelEditItemModal-{{ product.id }}">Скасувати</button>
                             <button type="submit" class="btn btn-primary">Зберегти</button>
                         </div>
                     </form>
+                    </div>
                 </div>
             </div>
 

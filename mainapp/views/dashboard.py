@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.text import slugify
@@ -133,8 +134,25 @@ def _handle_create_product(request, seller):
 
     product_form = ProductForm(request.POST, request.FILES)
     if product_form.is_valid():
+        attributes_raw = request.POST.get("attributes_json", "").strip()
+        try:
+            attributes = json.loads(attributes_raw) if attributes_raw else {}
+        except json.JSONDecodeError:
+            product_form.add_error(None, "Некоректний JSON характеристик товару.")
+            return render(
+                request,
+                "page_of_store/dashboard.html",
+                _build_dashboard_context(
+                    seller,
+                    store_id,
+                    {"product_form": product_form},
+                    request=request,
+                ),
+            )
+
         product = product_form.save(commit=False)
         product.store = selected_store
+        product.attributes = attributes if isinstance(attributes, dict) else {}
         product.save()
         return redirect(f"/dashboard?store={selected_store.id}")
 
@@ -165,8 +183,21 @@ def _handle_update_product(request, seller, product_id):
 
     product_form = ProductForm(request.POST, request.FILES, instance=product)
     if product_form.is_valid():
+        attributes_raw = request.POST.get("attributes_json", "").strip()
+        try:
+            attributes = json.loads(attributes_raw) if attributes_raw else {}
+        except json.JSONDecodeError:
+            product_form.add_error(None, "Некоректний JSON характеристик товару.")
+            return render(request, "page_of_store/dashboard.html",
+                          _build_dashboard_context(seller, product.store.id, {
+                              "product_form": ProductForm(),
+                              "edit_form": product_form,
+                              "edit_form_errors_product_id": product.id
+                          }, request=request))
+
         updated = product_form.save(commit=False)
         updated.store = product.store
+        updated.attributes = attributes if isinstance(attributes, dict) else {}
         updated.save()
         return redirect(f"/dashboard?store={product.store.id}")
 

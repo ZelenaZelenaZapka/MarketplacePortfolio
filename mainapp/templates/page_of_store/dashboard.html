@@ -18,23 +18,28 @@
         <h2>Новий магазин</h2>
         <button type="button" class="modal-close" id="closeStoreModal">&times;</button>
       </div>
-      {% include 'page_of_store/dashboard_func/form_store.html' %}
+
+      <div class="modal-body">
+        {% include 'page_of_store/dashboard_func/form_store.html' %}
+      </div>
     </div>
   </div>
 
   <!-- Item Modal -->
   <div class="modal-overlay" id="itemsModal">
-    <div class="modal-window">
+    <div class="modal-window modal-window--large">
       <div class="modal-window__head">
         <h2>Новий товар</h2>
         <button type="button" class="modal-close" id="closeItemsModal">&times;</button>
       </div>
-      {% include 'page_of_store/dashboard_func/form_item.html' %}
+
+      <div class="modal-body">
+        {% include 'page_of_store/dashboard_func/form_item.html' %}
+      </div>
     </div>
   </div>
 
   <script>
-    // Універсальна функція керування модальними вікнами
     function initModal(overlayId, openId, closeId, cancelId) {
       const overlay = document.getElementById(overlayId);
       const openBtn = document.getElementById(openId);
@@ -50,12 +55,17 @@
       if (overlay) overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
     }
 
-    // Ініціалізація стандартних модалок
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.active').forEach((overlay) => {
+          overlay.classList.remove('active');
+        });
+      }
+    });
+
     initModal('storeModal', 'openStoreModal', 'closeStoreModal', 'cancelStoreModal');
     initModal('itemsModal', 'openItemsModal', 'closeItemsModal', 'cancelItemsModal');
-
-    // Ініціалізація модалок редагування товарів (динамічні ID)
-    document.querySelectorAll('.seller-product-actions button[id^="openEditItemModal-"]').forEach(btn => {
+    document.querySelectorAll('.seller-product-actions button[id^="openEditItemModal-"]').forEach((btn) => {
       const productId = btn.id.replace('openEditItemModal-', '');
       initModal(
         `editItemModal-${productId}`,
@@ -65,12 +75,54 @@
       );
     });
 
-    // 🟢 Авто-відкриття модалки редагування, якщо Django повернув помилки валідації
-    const errorProductId = "{{ edit_form_errors_product_id }}";
-    if (errorProductId) {
-      const overlay = document.getElementById(`editItemModal-${errorProductId}`);
-      if (overlay) overlay.classList.add('active');
+    function createAttributeRow() {
+      const row = document.createElement('div');
+      row.className = 'attribute-row';
+      row.innerHTML = `
+        <input type="text" data-attr-name placeholder="Назва (наприклад: Колір)">
+        <input type="text" data-attr-value placeholder="Значення (наприклад: Чорний)">
+        <button type="button" class="btn btn-light" data-remove-attr>−</button>
+      `;
+      return row;
     }
+
+    function initAttributesEditor(form) {
+      const list = form.querySelector('[data-attributes-list]');
+      const addBtn = form.querySelector('[data-add-attr]');
+      const hiddenInput = form.querySelector('[data-attributes-json]');
+      if (!list || !addBtn || !hiddenInput) return;
+
+      addBtn.addEventListener('click', () => {
+        list.appendChild(createAttributeRow());
+      });
+
+      list.addEventListener('click', (event) => {
+        const removeBtn = event.target.closest('[data-remove-attr]');
+        if (!removeBtn) return;
+        const rows = list.querySelectorAll('.attribute-row');
+        if (rows.length > 1) {
+          removeBtn.closest('.attribute-row').remove();
+        } else {
+          const nameInput = rows[0].querySelector('[data-attr-name]');
+          const valueInput = rows[0].querySelector('[data-attr-value]');
+          if (nameInput) nameInput.value = '';
+          if (valueInput) valueInput.value = '';
+        }
+      });
+
+      form.addEventListener('submit', () => {
+        const attrs = {};
+        list.querySelectorAll('.attribute-row').forEach((row) => {
+          const name = row.querySelector('[data-attr-name]')?.value?.trim();
+          const value = row.querySelector('[data-attr-value]')?.value?.trim();
+          if (name && value) attrs[name] = value;
+        });
+        hiddenInput.value = JSON.stringify(attrs);
+      });
+    }
+
+    document.querySelectorAll('.js-attributes-editor').forEach(initAttributesEditor);
   </script>
+
 </body>
 </html>
